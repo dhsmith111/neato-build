@@ -4,6 +4,8 @@ Turning a Neato XV Signature Pro robot vacuum into an AI-powered cleaning machin
 
 The Neato already has LiDAR-based navigation and mapping. This project adds a vision layer on top: cameras see what the LiDAR can't (soft obstacles, clutter, risk assessment), and the AI decides how to handle each situation before the robot blindly drives into it.
 
+> **A note on component choices:** This is a hobby project built for fun and learning. The Pi 5 8GB and AI HAT+ 2 may be overkill for a robot vacuum — a Pi 4 or Zero 2W with a lighter-weight AI kit would likely work fine for basic obstacle detection. The higher-end hardware was chosen because these components will be reused across future projects, and having the extra headroom makes experimentation easier. This can absolutely be built for less.
+
 ## How It Works
 
 **Two-tier AI inference on the Hailo NPU:**

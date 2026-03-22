@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 780" width="500" height="780">
+  <!-- White background -->
+  <rect width="500" height="780" fill="#ffffff"/>
+  <style>
+    text { font-family: monospace; font-size: 11px; fill: #333; }
+    .label { font-size: 13px; font-weight: bold; }
+    .title { font-size: 16px; font-weight: bold; }
+    .dim { font-size: 10px; fill: #555; }
+  </style>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="250" y="25" text-anchor="middle" class="title">Neato XV — Top Mount Layout</text>
+
+  <!-- TOP VIEW label -->
+  <text x="250" y="50" text-anchor="middle" class="label">Top View</text>
+
+  <!-- Front arrow -->
+  <line x1="250" y1="72" x2="250" y2="57" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="285" y="67" class="dim">FRONT (bumper)</text>
+
+  <!-- Neato D-shape: flat top y=90 = front bumper, short sides to y=160, arc to y=280 = rear -->
+  <path d="M 130 90 L 370 90 L 370 160 A 120 120 0 0 1 130 160 Z" fill="#ddd" stroke="#333" stroke-width="2"/>
+  <text x="250" y="86" text-anchor="middle" class="dim">flat edge = bumper (front)</text>
+  <text x="250" y="300" text-anchor="middle" class="dim">round edge = rear</text>
+
+  <!-- LiDAR cover - in rear area but ~1" forward from back edge -->
+  <circle cx="250" cy="215" r="35" fill="#bbb" stroke="#555" stroke-width="1.5"/>
+
+  <!-- LiDAR window strip -->
+  <circle cx="250" cy="215" r="42" fill="none" stroke="#00bcd4" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <text x="80" y="213" fill="#00bcd4" font-family="monospace" font-size="9">LiDAR window</text>
+  <text x="80" y="223" fill="#00bcd4" font-family="monospace" font-size="9">(keep clear)</text>
+
+  <!-- Pi 5 + HAT+ 2 ON TOP of LiDAR cover -->
+  <rect x="210" y="190" width="80" height="52" rx="3" fill="#4caf50" stroke="#333" stroke-width="1.5" opacity="0.9"/>
+  <text x="250" y="208" text-anchor="middle" fill="white" font-family="monospace" font-size="9">Pi 5</text>
+  <text x="250" y="220" text-anchor="middle" fill="white" font-family="monospace" font-size="9">+ AI HAT+ 2</text>
+  <text x="250" y="232" text-anchor="middle" fill="white" font-family="monospace" font-size="8">(on LiDAR cover)</text>
+
+  <!-- Camera on top of Pi stack, facing front -->
+  <rect x="222" y="180" width="56" height="12" rx="2" fill="#ff9800" stroke="#333" stroke-width="1.5"/>
+  <text x="250" y="175" text-anchor="middle" fill="#ff9800" font-family="monospace" font-size="9">Camera (facing front)</text>
+
+  <!-- Relay + buck converter - behind Pi (toward rear) -->
+  <rect x="220" y="245" width="28" height="25" rx="2" fill="#9c27b0" stroke="#333" stroke-width="1"/>
+  <rect x="252" y="245" width="28" height="25" rx="2" fill="#e91e63" stroke="#333" stroke-width="1"/>
+  <text x="235" y="282" text-anchor="middle" fill="#9c27b0" font-family="monospace" font-size="9">Relay</text>
+  <text x="267" y="282" text-anchor="middle" fill="#e91e63" font-family="monospace" font-size="9">+ Buck</text>
+
+  <!-- Mini USB port - rear left on rounded part -->
+  <rect x="160" y="250" width="16" height="8" rx="1" fill="#607d8b" stroke="#333" stroke-width="1"/>
+  <text x="100" y="265" fill="#607d8b" font-family="monospace" font-size="9">Mini USB</text>
+  <text x="100" y="275" fill="#607d8b" font-family="monospace" font-size="9">(rear left)</text>
+
+  <!-- SIDE VIEW label -->
+  <text x="250" y="415" text-anchor="middle" class="label">Side View (facing right = front/bumper)</text>
+
+  <!-- Floor line -->
+  <line x1="60" y1="630" x2="440" y2="630" stroke="#333" stroke-width="1"/>
+  <text x="448" y="633" class="dim">floor</text>
+
+  <!-- Wheels -->
+  <circle cx="160" cy="620" r="18" fill="#555" stroke="#333" stroke-width="1.5"/>
+  <circle cx="340" cy="620" r="18" fill="#555" stroke="#333" stroke-width="1.5"/>
+
+  <!-- Neato body -->
+  <rect x="110" y="580" width="280" height="35" rx="8" fill="#ddd" stroke="#333" stroke-width="2"/>
+  <text x="250" y="602" text-anchor="middle" class="dim">Neato body</text>
+
+  <!-- LiDAR cover - toward rear (left in side view) -->
+  <rect x="130" y="568" width="70" height="14" rx="5" fill="#bbb" stroke="#555" stroke-width="1.5"/>
+
+  <!-- LiDAR window markers -->
+  <rect x="130" y="570" width="3" height="10" fill="#00bcd4"/>
+  <rect x="197" y="570" width="3" height="10" fill="#00bcd4"/>
+
+  <!-- Pi + HAT stack ON TOP of LiDAR cover -->
+  <rect x="135" y="538" width="60" height="30" rx="2" fill="#4caf50" stroke="#333" stroke-width="1.5"/>
+  <text x="165" y="550" text-anchor="middle" fill="white" font-family="monospace" font-size="8">HAT+ 2</text>
+  <text x="165" y="562" text-anchor="middle" fill="white" font-family="monospace" font-size="8">Pi 5</text>
+
+  <!-- Camera on very top, tilted forward -->
+  <rect x="150" y="528" width="35" height="10" rx="2" fill="#ff9800" stroke="#333" stroke-width="1.5" transform="rotate(-15, 168, 533)"/>
+  <text x="200" y="528" fill="#ff9800" font-family="monospace" font-size="9">Camera</text>
+  <text x="200" y="538" fill="#ff9800" font-family="monospace" font-size="9">(tilted down)</text>
+
+  <!-- Camera FOV lines -->
+  <line x1="172" y1="530" x2="350" y2="630" stroke="#ff9800" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.6"/>
+  <line x1="172" y1="530" x2="400" y2="580" stroke="#ff9800" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.6"/>
+  <text x="370" y="610" fill="#ff9800" font-family="monospace" font-size="9">120 deg FOV</text>
+
+  <!-- Stack height annotation -->
+  <line x1="120" y1="568" x2="120" y2="528" stroke="#666" stroke-width="0.8"/>
+  <line x1="116" y1="568" x2="124" y2="568" stroke="#666" stroke-width="0.8"/>
+  <line x1="116" y1="528" x2="124" y2="528" stroke="#666" stroke-width="0.8"/>
+  <text x="100" y="548" text-anchor="middle" fill="#666" font-family="monospace" font-size="8">~50mm</text>
+
+  <!-- Front/rear labels -->
+  <line x1="400" y1="575" x2="400" y2="555" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="400" y="550" text-anchor="middle" class="dim">FRONT</text>
+  <text x="110" y="595" class="dim">REAR</text>
+
+  <!-- Legend -->
+  <text x="80" y="670" class="label">Legend:</text>
+  <rect x="80" y="680" width="12" height="12" fill="#4caf50"/>
+  <text x="98" y="690" class="dim">Pi 5 + AI HAT+ 2</text>
+  <rect x="190" y="680" width="12" height="12" fill="#ff9800"/>
+  <text x="208" y="690" class="dim">Camera Module 3 Wide</text>
+  <rect x="330" y="680" width="12" height="12" fill="#9c27b0"/>
+  <text x="348" y="690" class="dim">Relay + Buck converter</text>
+</svg>

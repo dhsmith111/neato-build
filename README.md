@@ -94,7 +94,7 @@ Requires Raspberry Pi 5 with gpiozero + lgpio backend (RPi.GPIO is not supported
 
 ## Docs
 
-- [Bill of Materials](docs/BOM.md) — Complete parts list and costs (~$567)
+- [Bill of Materials](docs/BOM.md) — Complete parts list
 - [Power System](docs/POWER.md) — Battery specs, Yahboom PD board, wiring plan
 - [Wiring Reference](docs/WIRING.md) — Relay, serial, camera connections
 - [Software Setup](docs/SETUP.md) — Stack, robot config, troubleshooting

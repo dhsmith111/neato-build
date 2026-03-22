@@ -16,6 +16,8 @@ venv/
 # Test captures
 tests/*.jpg
 tests/*.png
+vision/*.jpg
+vision/*.png
 
 # lgpio daemon temp files
 .lgd-nfy*

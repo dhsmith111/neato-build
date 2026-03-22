@@ -59,11 +59,69 @@ print(vdevice.get_physical_devices_ids())  # ['0001:01:00.0']
 vdevice.release()
 ```
 
+### YOLOv8m inference on Hailo-10H
+
+**What didn't work — old `InferVStreams` API:**
+```python
+from hailo_platform import VDevice, HEF, InferVStreams, InputVStreamParams, OutputVStreamParams
+with VDevice() as vdevice:
+    network_group = vdevice.configure(hef)[0]  # FAILS: HAILO_NOT_IMPLEMENTED (error 7)
+```
+The `VDevice.configure()` + `InferVStreams` pattern is the Hailo-8 (hailort 4.x) synchronous API. It is **not implemented** on Hailo-10H (hailort 5.x). The Hailo community forums confirm this is expected — H10 requires the newer async InferModel API.
+
+**What works — `picamera2.devices.Hailo` wrapper:**
+```python
+from picamera2.devices import Hailo
+with Hailo('/usr/share/hailo-models/yolov8m_h10.hef') as hailo:
+    model_h, model_w, _ = hailo.get_input_shape()
+    results = hailo.run(frame)  # Returns list of 80 arrays, one per COCO class
+```
+The `Hailo` class (from picamera2) wraps `VDevice.create_infer_model()` + `configured_infer_model.run_async()`. Each array in the result has shape `(N, 5)` where N = detections for that class, and each row is `[y_min, x_min, y_max, x_max, confidence]`.
+
+Under the hood, the correct API path is:
+```python
+vdevice = VDevice(params)
+infer_model = vdevice.create_infer_model(hef_path)
+configured = infer_model.configure()
+bindings = configured.create_bindings()
+bindings.input().set_buffer(input_array)
+configured.run_async([bindings], callback)
+```
+
+**Pre-installed models** at `/usr/share/hailo-models/` (H10-compatible):
+- `yolov8m_h10.hef` — YOLOv8m object detection (640x640x3 input, 80 COCO classes)
+- `yolov11m_h10.hef` — YOLOv11m object detection
+- `yolov8m_pose_h10.hef` / `yolov8s_pose_h10.hef` — pose estimation
+- `yolov5n_seg_h10.hef` — segmentation
+- `resnet_v1_50_h10.hef` — classification
+
+**Performance (YOLOv8m on Hailo-10H, 50-frame benchmark):**
+- Inference: 26ms avg (25.7–26.9ms range)
+- Camera capture: 21ms avg at 640x640
+- End-to-end: 46.7ms avg → **21.4 FPS** sustained
+
+**Hailo tutorials** installed at `/usr/lib/python3/dist-packages/hailo_tutorials/notebooks/`:
+- `HRT_0_Async_Inference_Tutorial.ipynb` — async inference API
+- `HRT_1_Async_Inference_Multiple_Models_Tutorial.ipynb` — multi-model
+- `HRT_3_LLM_Tutorial.ipynb` — LLM on Hailo (relevant for Stage 5)
+- `HRT_4_VLM_Tutorial.ipynb` — VLM on Hailo (relevant for Stage 5)
+- `HRT_5_Speech2Text_Tutorial.ipynb` — speech-to-text
+
+**Known issue:** Hailo VDevice cleanup can crash with "Resource deadlock avoided" during Python exit. This is a cosmetic issue — inference results are valid. Separating camera and Hailo lifecycles (don't nest them) reduces but doesn't eliminate it.
+
+### Vision modules built
+- `vision/capture.py` — `Camera` class wrapping picamera2 (start/capture/stop, context manager)
+- `vision/detector.py` — `Detector` class wrapping Hailo inference (start/detect/stop, returns `Detection` objects)
+- `vision/detect_test.py` — single-frame test with bounding box overlay
+- `vision/benchmark.py` — sustained FPS measurement (50 frames)
+
 ### Still to do
-- YOLOv8n HEF model — object detection on Hailo
+- Test at floor level (actual robot use case)
+- Continuous streaming mode for reactive behaviors (Stage 4)
 
 ## Stage 5 (to install)
 - VLM runtime — QWEN2.5-VL-3B or Llama-3.2-3B-Instruct on Hailo HAT+ 2
+- Hailo tutorials already installed (see Stage 3 notes above)
 
 ## Stage 1 Setup Log — Mechanical Restoration
 1. Neato XV Signature Pro acquired, disassembled, cleaned

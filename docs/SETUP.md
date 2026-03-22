@@ -3,7 +3,8 @@
 ## OS & Runtime
 - Raspberry Pi OS 64-bit (Bookworm/Trixie)
 - Python 3.13
-- Venv: `~/neato-build/venv` — always activate before working
+- Venv: `~/neato-build/venv` — created with `--system-site-packages` (required for picamera2 and other system libraries)
+- Always activate before working: `source venv/bin/activate`
 
 ## GPIO
 - **Must use gpiozero + lgpio backend** — RPi.GPIO does NOT support Pi 5
@@ -13,9 +14,9 @@
 - pyserial — Neato serial communication
 - gpiozero — GPIO control (relay)
 - lgpio — Pi 5 GPIO backend
+- picamera2 — camera capture (system package via apt: `python3-picamera2`)
 
 ## Stage 3 (to install)
-- picamera2 — camera capture
 - Hailo runtime (HailoRT) — NPU inference
 - YOLOv8n HEF model — object detection on Hailo
 

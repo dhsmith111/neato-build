@@ -68,10 +68,12 @@ neato-build/
 ## Quick Start
 
 ```bash
-python -m venv venv
+python3 -m venv --system-site-packages venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
+
+The venv needs `--system-site-packages` for picamera2 and other system libraries. See [Software Setup](docs/SETUP.md) for details.
 
 ```python
 from neato_serial.neato import Neato

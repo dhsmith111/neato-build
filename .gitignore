@@ -13,6 +13,13 @@ venv/
 *.log
 *.csv
 
+# Test captures
+tests/*.jpg
+tests/*.png
+
+# lgpio daemon temp files
+.lgd-nfy*
+
 # OS
 .DS_Store
 Thumbs.db

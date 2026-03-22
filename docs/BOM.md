@@ -23,7 +23,6 @@
 ## Power & Wiring
 | Item | Source |
 |------|--------|
-| Seloky LM2596 DC-DC Buck Converter 5-pack (3A max — inadequate for Pi 5) | Amazon |
 | SunFounder 2 Channel DC 5V Relay Module | Amazon |
 | ELEGOO 120pcs Dupont Wire Kit (M-F, M-M, F-F) | Amazon |
 | Breadboard and Jumper Wires Kit (830 + 400 tie point) | Amazon |

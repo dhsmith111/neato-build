@@ -19,6 +19,9 @@ tests/*.png
 vision/*.jpg
 vision/*.png
 
+# All captured images
+captures/
+
 # lgpio daemon temp files
 .lgd-nfy*
 

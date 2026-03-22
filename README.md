@@ -11,7 +11,7 @@ AI vision layer on top of a Neato XV Signature Pro's LiDAR navigation. A Raspber
 | AI Accelerator | AI HAT+ 2 (Hailo-10H, 40 TOPS, 8GB) |
 | Cameras | 2x Pi Camera Module 3 Wide (one standard, one NoIR) |
 | Connection | USB serial via relay power cycle workaround |
-| Power | LM2596 buck converter (24V Neato battery → 5V Pi) |
+| Power | Yahboom PD board (Neato 4S Li-ion battery → 5V/5A Pi) |
 
 ## Architecture
 
@@ -20,6 +20,14 @@ AI vision layer on top of a Neato XV Signature Pro's LiDAR navigation. A Raspber
 - **Slow loop** — Vision-language model for strategic scene understanding and cleaning plan generation
 
 **Scout mode** — Pre-clean pass where the robot drives slowly through the home with cameras active, classifies obstacles by type and risk, and generates an optimized cleaning plan before the brush roll activates.
+
+## Documentation
+
+- [docs/BOM.md](docs/BOM.md) — Complete bill of materials and purchase history
+- [docs/POWER.md](docs/POWER.md) — Power system design and battery details
+- [docs/WIRING.md](docs/WIRING.md) — Relay, serial, and camera wiring reference
+- [docs/SETUP.md](docs/SETUP.md) — Software stack, robot config, troubleshooting
+- [docs/mounting-layout.svg](docs/mounting-layout.svg) — Physical mounting diagram
 
 ## Project Structure
 

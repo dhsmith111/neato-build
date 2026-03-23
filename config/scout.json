@@ -1,0 +1,53 @@
+{
+  "step_distance_mm": 150,
+  "step_speed_mm_s": 200,
+  "max_step_distance_mm": 300,
+  "clear_frames_before_speedup": 3,
+  "turn_distance_mm": 190,
+  "turn_speed_mm_s": 100,
+  "backup_distance_mm": 150,
+  "backup_speed_mm_s": 100,
+  "max_straight_mm": 900,
+  "move_settle_time_s": 0.3,
+
+  "confidence_threshold": 0.4,
+  "zone_thresholds": {
+    "near": 0.05,
+    "close": 0.20,
+    "danger": 0.50
+  },
+
+  "wall_slow_mm": 40,
+  "wall_stop_mm": 20,
+  "cliff_threshold_mm": 5,
+  "tilt_threshold_degrees": 5.0,
+  "overhead_top_fraction": 0.10,
+  "overhead_min_area": 0.15,
+
+  "pet_labels": ["cat", "dog"],
+  "obstacle_labels": [
+    "person", "chair", "couch", "bed", "dining table",
+    "toilet", "refrigerator", "oven", "tv", "laptop",
+    "bicycle", "motorcycle", "suitcase", "backpack"
+  ],
+  "ignore_labels": ["book", "clock", "vase", "cup", "bottle", "potted plant"],
+
+  "pet_wait_seconds": 3.0,
+  "sensor_poll_interval_s": 0.15,
+  "lidar_interval_s": 30,
+  "log_every_n_frames": 10,
+
+  "diag_mode": true,
+
+  "sounds": {
+    "startup": 0,
+    "layer1_alert": 19,
+    "layer2_attention": 3,
+    "layer3_exploring": 11,
+    "picked_up": 13,
+    "returning_home": 15,
+    "shutdown": 12,
+    "docking": 4,
+    "done": 2
+  }
+}

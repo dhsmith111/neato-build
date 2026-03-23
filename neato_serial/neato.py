@@ -1,5 +1,6 @@
 from gpiozero import OutputDevice
 import serial
+import threading
 import time
 import os
 
@@ -12,6 +13,7 @@ class Neato:
         self.baud = baud
         self.relay = OutputDevice(relay_pin, active_high=True, initial_value=True)
         self.ser = None
+        self._lock = threading.Lock()
 
     def power_cycle(self, off_time=3, settle_time=3, reappear_timeout=30):
         """Cut VBUS via relay, wait for port to drop and reappear, then connect."""
@@ -60,13 +62,14 @@ class Neato:
         self.relay.off()
 
     def send(self, command, delay=0.5):
-        """Send a command and return the response as a string."""
+        """Send a command and return the response as a string. Thread-safe."""
         if not self.ser or not self.ser.is_open:
             raise ConnectionError("Serial port not open — call connect() or power_cycle() first")
-        self.ser.reset_input_buffer()
-        self.ser.write(f"{command}\n".encode())
-        time.sleep(delay)
-        response = self.ser.read(self.ser.in_waiting)
+        with self._lock:
+            self.ser.reset_input_buffer()
+            self.ser.write(f"{command}\n".encode())
+            time.sleep(delay)
+            response = self.ser.read(self.ser.in_waiting)
         return response.decode('utf-8', errors='replace')
 
     # --- Common commands ---
@@ -97,3 +100,52 @@ class Neato:
 
     def set_config(self, key, value):
         return self.send(f"SetConfig {key} {value}")
+
+    # --- Sensor commands ---
+
+    def get_digital_sensors(self):
+        """Return digital sensor values as a dict."""
+        raw = self.send('GetDigitalSensors', delay=0.3)
+        sensors = {}
+        for line in raw.strip().split('\n'):
+            if ',' in line and not line.startswith('Digital'):
+                parts = line.split(',')
+                if len(parts) >= 2:
+                    sensors[parts[0].strip()] = int(parts[1].strip())
+        return sensors
+
+    def get_analog_sensors(self):
+        """Return analog sensor values as a dict."""
+        raw = self.send('GetAnalogSensors', delay=0.3)
+        sensors = {}
+        for line in raw.strip().split('\n'):
+            if ',' in line and not line.startswith('Sensor'):
+                parts = line.split(',')
+                if len(parts) >= 2:
+                    try:
+                        sensors[parts[0].strip()] = int(parts[1].strip())
+                    except ValueError:
+                        pass
+        return sensors
+
+    def get_accel_parsed(self):
+        """Return accelerometer as dict with float values."""
+        raw = self.send('GetAccel', delay=0.3)
+        accel = {}
+        for line in raw.strip().split('\n'):
+            if ',' in line and not line.startswith('Label'):
+                parts = line.split(',')
+                if len(parts) >= 2:
+                    try:
+                        accel[parts[0].strip()] = float(parts[1].strip())
+                    except ValueError:
+                        pass
+        return accel
+
+    def play_sound(self, sound_id):
+        """Play a built-in sound (0-20). TestMode only."""
+        return self.send(f"PlaySound SoundID {sound_id}", delay=0.1)
+
+    def set_led(self, *args):
+        """Set LED state. TestMode only. e.g. set_led('ButtonGreen', 'BlinkOn')"""
+        return self.send(f"SetLED {' '.join(args)}", delay=0.1)

@@ -1,0 +1,229 @@
+{
+  "generated": "2026-03-22T20:23:33.686845",
+  "runs": [
+    {
+      "label": "20260322_201514_clean_mode_log",
+      "duration_s": 118.83,
+      "n_frames": 94,
+      "fps": 0.7910460321467643,
+      "behaviors": {
+        "straight": 29,
+        "turn_left": 26,
+        "turn_right": 33,
+        "spin_left": 8,
+        "spin_right": 10,
+        "backing": 2,
+        "stopped": 4
+      },
+      "speed_stats": {
+        "fwd_left_avg": 107.81818181818181,
+        "fwd_left_max": 264.0,
+        "fwd_right_avg": 97.03947368421052,
+        "fwd_right_max": 247.0,
+        "all_left_min": -112.0,
+        "all_left_max": 264.0,
+        "all_right_min": -112.0,
+        "all_right_max": 247.0
+      },
+      "wall_stats": {
+        "min": 1,
+        "max": 74,
+        "avg": 51.45161290322581,
+        "close_count": 17,
+        "contact_count": 6
+      },
+      "wall_follow_segments": [
+        [
+          32,
+          32,
+          1
+        ],
+        [
+          36,
+          38,
+          3
+        ],
+        [
+          41,
+          44,
+          4
+        ],
+        [
+          68,
+          68,
+          1
+        ],
+        [
+          70,
+          72,
+          3
+        ],
+        [
+          77,
+          77,
+          1
+        ],
+        [
+          84,
+          84,
+          1
+        ],
+        [
+          86,
+          86,
+          1
+        ],
+        [
+          90,
+          91,
+          2
+        ]
+      ],
+      "bumps_front": 0,
+      "bumps_side": 3,
+      "bump_responses": [
+        {
+          "frame": 37,
+          "type": "side",
+          "sequence": [
+            {
+              "frame": 35,
+              "wall_mm": 60,
+              "left_speed": 111.0,
+              "right_speed": 34.0
+            },
+            {
+              "frame": 36,
+              "wall_mm": 35,
+              "left_speed": 102.0,
+              "right_speed": 17.0
+            },
+            {
+              "frame": 37,
+              "wall_mm": 3,
+              "left_speed": 59.0,
+              "right_speed": 102.0
+            },
+            {
+              "frame": 38,
+              "wall_mm": 4,
+              "left_speed": 85.0,
+              "right_speed": 85.0
+            },
+            {
+              "frame": 39,
+              "wall_mm": 3,
+              "left_speed": 85.0,
+              "right_speed": 76.0
+            },
+            {
+              "frame": 40,
+              "wall_mm": 67,
+              "left_speed": 102.0,
+              "right_speed": 59.0
+            }
+          ]
+        },
+        {
+          "frame": 56,
+          "type": "side",
+          "sequence": [
+            {
+              "frame": 54,
+              "wall_mm": 24,
+              "left_speed": -103.0,
+              "right_speed": 0.0
+            },
+            {
+              "frame": 55,
+              "wall_mm": 65,
+              "left_speed": 111.0,
+              "right_speed": 17.0
+            },
+            {
+              "frame": 56,
+              "wall_mm": 63,
+              "left_speed": 111.0,
+              "right_speed": 102.0
+            },
+            {
+              "frame": 57,
+              "wall_mm": 73,
+              "left_speed": -112.0,
+              "right_speed": 111.0
+            },
+            {
+              "frame": 58,
+              "wall_mm": 73,
+              "left_speed": -112.0,
+              "right_speed": 119.0
+            },
+            {
+              "frame": 59,
+              "wall_mm": 72,
+              "left_speed": 102.0,
+              "right_speed": 128.0
+            }
+          ]
+        },
+        {
+          "frame": 71,
+          "type": "side",
+          "sequence": [
+            {
+              "frame": 69,
+              "wall_mm": 6,
+              "left_speed": -94.0,
+              "right_speed": 0.0
+            },
+            {
+              "frame": 70,
+              "wall_mm": 23,
+              "left_speed": 85.0,
+              "right_speed": 76.0
+            },
+            {
+              "frame": 71,
+              "wall_mm": 4,
+              "left_speed": 59.0,
+              "right_speed": 93.0
+            },
+            {
+              "frame": 72,
+              "wall_mm": 3,
+              "left_speed": 68.0,
+              "right_speed": 85.0
+            },
+            {
+              "frame": 73,
+              "wall_mm": 1,
+              "left_speed": 68.0,
+              "right_speed": 85.0
+            },
+            {
+              "frame": 74,
+              "wall_mm": 55,
+              "left_speed": 93.0,
+              "right_speed": 34.0
+            }
+          ]
+        }
+      ],
+      "cleaning_stats": {
+        "brush_avg_rpm": 1192.141304347826,
+        "vacuum_avg_rpm": 9792.391304347826
+      },
+      "odometry": {
+        "left_total_mm": 9076.0,
+        "right_total_mm": 8405.0,
+        "avg_distance_mm": 8740.5,
+        "avg_speed_mm_s": 73.55465791466801
+      },
+      "detections": {
+        "person": 4,
+        "toothbrush": 1,
+        "suitcase": 1
+      }
+    }
+  ]
+}

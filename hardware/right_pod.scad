@@ -66,7 +66,7 @@ pi_board_y_far  = pi_y_rear  + 4.5;  // USB/far edge of board in pod Y (~64mm)
 // Measured from NIC-side board edge: NIC/USB3 gap at 19mm, USB3/USB2 gap at 37mm
 // Board NIC edge in pod Y = pi_board_y_near = pi_y_front - 4.5 = ~6mm
 port_post_nic_usb3 = pi_board_y_near + 19;  // ~25mm in pod Y
-port_post_usb3_usb2 = pi_board_y_near + 37; // ~43mm in pod Y
+port_post_usb3_usb2 = pi_board_y_near + 39; // ~45mm in pod Y (shifted 2mm toward USB2)
 
 // Port zone Z heights: board at 23mm, ports ~15mm tall → zone is 23-38mm
 // Lower post segment: 0 to 20mm (below board)

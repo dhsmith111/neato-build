@@ -49,5 +49,7 @@
 ### TODO Before Designing
 1. Measure right rear arc width and height on physical robot
 2. Calibrate and test Ender 3
-3. Choose FreeCAD or Fusion 360
-4. Design pod, print test fit in PLA first
+3. Install OpenSCAD (free — openscad.org) — Claude will write the design as code, no CAD skills needed
+4. Claude generates OpenSCAD file from measurements
+5. Render → export STL → slice in Cura → print test fit in PLA
+6. Iterate based on fit

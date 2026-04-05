@@ -88,8 +88,12 @@ module side_rails() {
     translate([0, 0, pod_height - rail_w])
         cube([rail_w, pod_depth, rail_w]);                           // top horizontal
 
-    // Inner (right/vent) side — horizontal beams only, no vertical posts
-    // Port zone left fully open for USB/ethernet access
+    // Inner (right/vent) side — corner posts kept, center post removed
+    // No center post so port zone is unobstructed for USB/ethernet access
+    translate([pod_width - rail_w, 0, 0])
+        cube([rail_w, rail_w, pod_height]);                          // back post
+    translate([pod_width - rail_w, pod_depth - rail_w, 0])
+        cube([rail_w, rail_w, pod_height]);                          // front post
     translate([pod_width - rail_w, 0, pod_height / 2 - rail_w / 2])
         cube([rail_w, pod_depth, rail_w]);                           // mid horizontal
     translate([pod_width - rail_w, 0, pod_height - rail_w])

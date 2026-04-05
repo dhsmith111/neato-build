@@ -43,9 +43,21 @@ with screws through component mounting holes.
 ### Right Pod — Pi 5 + AI HAT+ 2
 - Hole pattern: 58x49mm, M2.5 (standoff_hole = 2.7mm)
 - Pi 5 board: 85x58mm — long axis (85mm) runs horizontally across chassis
-- USB/ethernet ports face inward (toward center vent) = right side of pod
-- Outer (left) side: full posts + horizontals
-- Inner (right/vent) side: corner posts only, no center post — port zone unobstructed
+- USB/ethernet ports face inward (toward center vent) = right side of pod (high Y)
+- NIC side = low Y (near Y=0), USB2 side = high Y (near pod_depth)
+
+**Outer (left) side:** full corner posts + center post + mid + top horizontals
+
+**Inner (right/vent) side — port-aware structure:**
+- 2 full-height corner posts (back/NIC and front/USB2)
+- 2 thin (3mm) posts reaching from floor to mid horizontal beam:
+  - NIC/USB3 boundary: 19mm from NIC board edge → ~25mm pod Y
+  - USB3/USB2 boundary: 39mm from NIC board edge → ~45mm pod Y
+  - 20mm spread between posts — USB3 pair fits cleanly between them
+- Mid horizontal beam at pod_height/2 (~33mm) supported by all 4 posts
+- Single center post above mid beam (between the two thin post Y positions)
+- Top horizontal beam at pod_height - rail_w (61mm)
+- Port zone (23-38mm Z) left fully open between corner posts
 
 ### Inner Left Pod — Relay Module
 - Hole pattern: 52.2x36.6mm, M3 (standoff_hole = 3.2mm)

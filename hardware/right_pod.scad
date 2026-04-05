@@ -124,26 +124,20 @@ module side_rails() {
     translate([pod_width - rail_w, pod_depth - rail_w, 0])
         cube([rail_w, rail_w, pod_height]);                          // front corner post (USB side)
 
-    // Thin inter-port posts: split lower/upper to clear port zone
-    // USB/USB gap post
+    // Thin inter-port posts: lower segment only (below board/port zone)
+    // These support the mid horizontal beam without blocking ports
     translate([pod_width - thin_post, port_post_usb_usb - thin_post/2, 0])
-        cube([thin_post, thin_post, port_z_lower]);                  // lower segment
-    translate([pod_width - thin_post, port_post_usb_usb - thin_post/2, port_z_upper])
-        cube([thin_post, thin_post, pod_height - port_z_upper]);     // upper segment
-
-    // USB/NIC gap post
+        cube([thin_post, thin_post, port_z_lower]);                  // USB/USB gap, lower only
     translate([pod_width - thin_post, port_post_usb_nic - thin_post/2, 0])
-        cube([thin_post, thin_post, port_z_lower]);                  // lower segment
-    translate([pod_width - thin_post, port_post_usb_nic - thin_post/2, port_z_upper])
-        cube([thin_post, thin_post, pod_height - port_z_upper]);     // upper segment
+        cube([thin_post, thin_post, port_z_lower]);                  // USB/NIC gap, lower only
 
-    // Mid horizontal beam — supported by all 4 posts (2 corner + 2 thin)
-    translate([pod_width - rail_w, 0, port_z_lower])
-        cube([rail_w, pod_depth, rail_w]);                           // lower mid horizontal
+    // Mid horizontal beam at pod mid-height — supported by corner posts
+    translate([pod_width - rail_w, 0, pod_height / 2 - rail_w / 2])
+        cube([rail_w, pod_depth, rail_w]);                           // mid horizontal
 
-    // Center vertical post above mid beam (between the two thin posts)
-    translate([pod_width - thin_post, (port_post_usb_usb + port_post_usb_nic)/2 - thin_post/2, port_z_upper])
-        cube([thin_post, thin_post, pod_height - port_z_upper]);     // center upper post
+    // Single center post above mid beam — supports top horizontal
+    translate([pod_width - thin_post, pod_depth / 2 - thin_post/2, pod_height / 2 + rail_w / 2])
+        cube([thin_post, thin_post, pod_height / 2 - rail_w]);       // center upper post
 
     // Top horizontal beam
     translate([pod_width - rail_w, 0, pod_height - rail_w])

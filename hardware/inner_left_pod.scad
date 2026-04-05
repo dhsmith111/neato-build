@@ -14,8 +14,12 @@
 // PARAMETERS
 // ============================================================
 
-pod_width  = 70;
-pod_depth  = 63;
+// Relay board: 63mm wide x 41mm deep. 3mm clearance each side.
+// Inner space = pod_width - rail_w*2 = 75 - 10 = 65mm (1mm each side of 63mm board — tight but ok)
+// Inner depth = pod_depth - rail_w*2 = 53 - 10 = 43mm (1mm each side of 41mm board — tight but ok)
+// Using 55 and 63 for comfortable clearance
+pod_width  = 75;
+pod_depth  = 55;
 pod_height = 66;
 
 rail_w = 5;

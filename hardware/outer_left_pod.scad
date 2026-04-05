@@ -16,8 +16,11 @@
 // PARAMETERS
 // ============================================================
 
-pod_width  = 95;
-pod_depth  = 63;
+// Yahboom board: 65mm wide x 56mm deep. 3mm clearance each side.
+// Inner space = pod_width - outer_rail_w - rail_w = 86 - 10 - 5 = 71mm (3mm each side of 65mm board)
+// Inner depth = pod_depth - rail_w*2 = 68 - 10 = 58mm (1mm each side of 56mm board — tight but ok)
+pod_width  = 86;
+pod_depth  = 68;
 pod_height = 66;
 
 rail_w       = 5;

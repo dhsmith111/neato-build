@@ -22,8 +22,11 @@
 // pod_width  = dimension across chassis (left-right when mounted) = Pi long axis direction
 // pod_depth  = dimension outward from chassis (front-back)
 // pod_height = dimension up the chassis surface (up-down when mounted)
-pod_width  = 95;   // across chassis — Pi board is 85mm, 5mm clearance each side
-pod_depth  = 63;   // outward from chassis
+// Pi board: 85mm wide x 58mm deep. 3mm clearance each side.
+// Inner space = pod_width - rail_w*2 = 101 - 10 = 91mm (3mm each side of 85mm board)
+// Inner depth = pod_depth - rail_w*2 = 70 - 10 = 60mm (1mm each side of 58mm board — tight but ok)
+pod_width  = 101;  // across chassis
+pod_depth  = 70;   // outward from chassis
 pod_height = 66;   // up the chassis surface
 
 rail_w = 5;

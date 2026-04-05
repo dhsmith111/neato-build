@@ -6,11 +6,20 @@ Currently iterating on design — not yet printed.
 
 ## Three Pod Files
 
-| File | Component | Width | Depth | Height |
-|------|-----------|-------|-------|--------|
-| `right_pod.scad` | Pi 5 + AI HAT+ 2 (pre-stacked) | 95mm | 63mm | 66mm |
-| `inner_left_pod.scad` | SunFounder 2-ch relay module | 70mm | 63mm | 66mm |
-| `outer_left_pod.scad` | Yahboom PD power board | 95mm | 63mm | 66mm |
+**Dimension key:**
+- `pod_width` = across chassis (left-right when mounted) — must fit board width + 2x rail
+- `pod_depth` = outward from chassis — must fit board depth + 2x rail
+- `pod_height` = up the chassis surface — all pods 66mm
+- Rail width: 5mm standard, 10mm on outer left exposed edge
+- Board must fit inside rails with ~3mm clearance each side
+
+| File | Component | Board (W×D) | pod_width | pod_depth | Inner space (W×D) |
+|------|-----------|-------------|-----------|-----------|-------------------|
+| `right_pod.scad` | Pi 5 + AI HAT+ 2 | 85×58mm | 101mm | 70mm | 91×60mm |
+| `inner_left_pod.scad` | Relay module | 63×41mm | 75mm | 55mm | 65×45mm |
+| `outer_left_pod.scad` | Yahboom PD board | 65×56mm | 86mm | 68mm | 71×58mm |
+
+Note: outer_left inner width = pod_width - outer_rail_w(10) - rail_w(5) = 71mm
 
 ## Design Principles
 
@@ -33,9 +42,10 @@ with screws through component mounting holes.
 
 ### Right Pod — Pi 5 + AI HAT+ 2
 - Hole pattern: 58x49mm, M2.5 (standoff_hole = 2.7mm)
-- Pi 5 board: 85x56mm — fits within 95x63mm pod with clearance
-- USB/ethernet ports face inward (toward center vent) — front of pod is open, cables access freely
-- Both side walls: symmetric (3 posts + 2 horizontal rails each side)
+- Pi 5 board: 85x58mm — long axis (85mm) runs horizontally across chassis
+- USB/ethernet ports face inward (toward center vent) = right side of pod
+- Outer (left) side: full posts + horizontals
+- Inner (right/vent) side: corner posts only, no center post — port zone unobstructed
 
 ### Inner Left Pod — Relay Module
 - Hole pattern: 52.2x36.6mm, M3 (standoff_hole = 3.2mm)

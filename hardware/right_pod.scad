@@ -10,8 +10,16 @@
 //   Top, front, back open
 //
 // INNER (right) side rail:
-//   No vertical posts — full port zone left open for USB/ethernet access
-//   Horizontal beam at bottom and top only
+//   Corner posts (back + front) full height
+//   Two thin 3mm posts in gaps between port housings (USB/USB and USB/NIC gaps)
+//     split into lower (0-20mm) and upper (42-66mm) segments to clear port zone
+//   Mid horizontal beam supported by all 4 posts (2 corner + 2 thin)
+//   Center vertical post above mid beam supports top horizontal
+//
+// Port gap Y positions (measured from board USB-far edge, converted to pod Y):
+//   Board far Y edge = pi_y_rear + (58 - pi_hole_y_span)/2 = ~64mm
+//   USB/USB gap center: board edge - 23mm = ~41mm in pod Y
+//   USB/NIC gap center: board edge - 36mm = ~28mm in pod Y
 //
 // All measurements in mm. Print in PLA, no supports needed.
 
@@ -42,12 +50,30 @@ standoff_hole = 2.7; // M2.5
 pi_hole_x_span = 58;
 pi_hole_y_span = 49;
 
-pi_x_left  = (pod_width - pi_hole_x_span) / 2;  // 18.5mm from left rail
-pi_x_right = pi_x_left + pi_hole_x_span;         // 76.5mm from left rail
+pi_x_left  = (pod_width - pi_hole_x_span) / 2;  // 21.5mm from left rail
+pi_x_right = pi_x_left + pi_hole_x_span;         // 79.5mm from left rail
 
-pi_y_front = (pod_depth - pi_hole_y_span) / 2;   // 7mm from front
-pi_y_rear  = pi_y_front + pi_hole_y_span;         // 56mm from front
-pi_y_mid   = (pi_y_front + pi_y_rear) / 2;        // 31.5mm — center structural rib
+pi_y_front = (pod_depth - pi_hole_y_span) / 2;   // 10.5mm from front (NIC side)
+pi_y_rear  = pi_y_front + pi_hole_y_span;         // 59.5mm from front (USB side)
+pi_y_mid   = (pi_y_front + pi_y_rear) / 2;        // 35mm — center structural rib
+
+// Pi board edges (for port position calculations)
+// Board depth = 58mm, hole_y_span = 49mm, so board overhangs holes by (58-49)/2 = 4.5mm each side
+pi_board_y_near = pi_y_front - 4.5;  // NIC/near edge of board in pod Y
+pi_board_y_far  = pi_y_rear  + 4.5;  // USB/far edge of board in pod Y (~64mm)
+
+// Thin inter-port posts on inner (right) side rail
+// Measured from USB-far edge of board: USB/USB gap at 23mm, USB/NIC gap at 36mm
+port_post_usb_usb = pi_board_y_far - 23;  // ~41mm in pod Y
+port_post_usb_nic = pi_board_y_far - 36;  // ~28mm in pod Y
+
+// Port zone Z heights: board at 23mm, ports ~15mm tall → zone is 23-38mm
+// Lower post segment: 0 to 20mm (below board)
+// Upper post segment: 42mm to pod_height (above ports)
+port_z_lower = 20;
+port_z_upper = 42;
+
+thin_post = 3; // width of inter-port posts
 
 // Ribs centered exactly on standoff Y positions
 rib_positions = [pi_y_front, pi_y_mid, pi_y_rear];
@@ -91,14 +117,35 @@ module side_rails() {
     translate([0, 0, pod_height - rail_w])
         cube([rail_w, pod_depth, rail_w]);                           // top horizontal
 
-    // Inner (right/vent) side — corner posts kept, center post removed
-    // No center post so port zone is unobstructed for USB/ethernet access
+    // Inner (right/vent) side — port-aware structure
+    // Corner posts: full height
     translate([pod_width - rail_w, 0, 0])
-        cube([rail_w, rail_w, pod_height]);                          // back post
+        cube([rail_w, rail_w, pod_height]);                          // back corner post (NIC side)
     translate([pod_width - rail_w, pod_depth - rail_w, 0])
-        cube([rail_w, rail_w, pod_height]);                          // front post
-    translate([pod_width - rail_w, 0, pod_height / 2 - rail_w / 2])
-        cube([rail_w, pod_depth, rail_w]);                           // mid horizontal
+        cube([rail_w, rail_w, pod_height]);                          // front corner post (USB side)
+
+    // Thin inter-port posts: split lower/upper to clear port zone
+    // USB/USB gap post
+    translate([pod_width - thin_post, port_post_usb_usb - thin_post/2, 0])
+        cube([thin_post, thin_post, port_z_lower]);                  // lower segment
+    translate([pod_width - thin_post, port_post_usb_usb - thin_post/2, port_z_upper])
+        cube([thin_post, thin_post, pod_height - port_z_upper]);     // upper segment
+
+    // USB/NIC gap post
+    translate([pod_width - thin_post, port_post_usb_nic - thin_post/2, 0])
+        cube([thin_post, thin_post, port_z_lower]);                  // lower segment
+    translate([pod_width - thin_post, port_post_usb_nic - thin_post/2, port_z_upper])
+        cube([thin_post, thin_post, pod_height - port_z_upper]);     // upper segment
+
+    // Mid horizontal beam — supported by all 4 posts (2 corner + 2 thin)
+    translate([pod_width - rail_w, 0, port_z_lower])
+        cube([rail_w, pod_depth, rail_w]);                           // lower mid horizontal
+
+    // Center vertical post above mid beam (between the two thin posts)
+    translate([pod_width - thin_post, (port_post_usb_usb + port_post_usb_nic)/2 - thin_post/2, port_z_upper])
+        cube([thin_post, thin_post, pod_height - port_z_upper]);     // center upper post
+
+    // Top horizontal beam
     translate([pod_width - rail_w, 0, pod_height - rail_w])
         cube([rail_w, pod_depth, rail_w]);                           // top horizontal
 }

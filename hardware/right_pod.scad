@@ -63,9 +63,10 @@ pi_board_y_near = pi_y_front - 4.5;  // NIC/near edge of board in pod Y
 pi_board_y_far  = pi_y_rear  + 4.5;  // USB/far edge of board in pod Y (~64mm)
 
 // Thin inter-port posts on inner (right) side rail
-// Measured from USB-far edge of board: USB/USB gap at 23mm, USB/NIC gap at 36mm
-port_post_usb_usb = pi_board_y_far - 23;  // ~41mm in pod Y
-port_post_usb_nic = pi_board_y_far - 36;  // ~28mm in pod Y
+// Measured from NIC-side board edge: NIC/USB3 gap at 19mm, USB3/USB2 gap at 37mm
+// Board NIC edge in pod Y = pi_board_y_near = pi_y_front - 4.5 = ~6mm
+port_post_nic_usb3 = pi_board_y_near + 19;  // ~25mm in pod Y
+port_post_usb3_usb2 = pi_board_y_near + 37; // ~43mm in pod Y
 
 // Port zone Z heights: board at 23mm, ports ~15mm tall → zone is 23-38mm
 // Lower post segment: 0 to 20mm (below board)
@@ -124,19 +125,19 @@ module side_rails() {
     translate([pod_width - rail_w, pod_depth - rail_w, 0])
         cube([rail_w, rail_w, pod_height]);                          // front corner post (USB side)
 
-    // Thin inter-port posts: lower segment only (below board/port zone)
-    // These support the mid horizontal beam without blocking ports
-    translate([pod_width - thin_post, port_post_usb_usb - thin_post/2, 0])
-        cube([thin_post, thin_post, port_z_lower]);                  // USB/USB gap, lower only
-    translate([pod_width - thin_post, port_post_usb_nic - thin_post/2, 0])
-        cube([thin_post, thin_post, port_z_lower]);                  // USB/NIC gap, lower only
+    // Thin inter-port posts: full height up to mid horizontal beam
+    // Placed in gaps between NIC/USB3 and USB3/USB2 port housings
+    translate([pod_width - thin_post, port_post_nic_usb3 - thin_post/2, 0])
+        cube([thin_post, thin_post, pod_height / 2 - rail_w / 2]);   // NIC/USB3 gap post
+    translate([pod_width - thin_post, port_post_usb3_usb2 - thin_post/2, 0])
+        cube([thin_post, thin_post, pod_height / 2 - rail_w / 2]);   // USB3/USB2 gap post
 
     // Mid horizontal beam at pod mid-height — supported by corner posts
     translate([pod_width - rail_w, 0, pod_height / 2 - rail_w / 2])
         cube([rail_w, pod_depth, rail_w]);                           // mid horizontal
 
     // Single center post above mid beam — supports top horizontal
-    translate([pod_width - thin_post, pod_depth / 2 - thin_post/2, pod_height / 2 + rail_w / 2])
+    translate([pod_width - thin_post, (port_post_nic_usb3 + port_post_usb3_usb2) / 2 - thin_post/2, pod_height / 2 + rail_w / 2])
         cube([thin_post, thin_post, pod_height / 2 - rail_w]);       // center upper post
 
     // Top horizontal beam

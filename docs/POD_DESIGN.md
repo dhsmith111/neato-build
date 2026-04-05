@@ -1,7 +1,7 @@
 # Pod Design — 3D Printed Electronics Mounts
 
 ## Status
-SCAD files exist in `neato-ai-build-workspace-repos/ender3-setup` repo (`designs/` folder).
+SCAD files live in `hardware/` folder of this repo.
 Currently iterating on design — not yet printed.
 
 ## Three Pod Files
@@ -63,13 +63,13 @@ with screws through component mounting holes.
   battery cables from right side of chassis reach naturally
 - **Relay inner-left**: USB serial cable from chassis center-left is a short run
 
-## SCAD File Status (ender3-setup repo)
+## SCAD File History (ender3-setup repo, for reference)
 
-Key commits:
+Files originated in `ender3-setup` repo and were moved here. Key commits there:
 - `0d98ef3` — initial baseline
 - `92bfee9` — rib_w widened to 12mm, standoff/rib alignment correct
 - `f98b06a` — revert of bad USB gap change (second chat made incorrect edit)
-- `b61f88a` — center support posts added to left pod side rails (current clean state)
+- `b61f88a` — center support posts added to left pod side rails
 
 ## Printing Plan
 

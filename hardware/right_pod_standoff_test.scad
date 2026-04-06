@@ -21,11 +21,11 @@ standoff_hole = 2.7; // M2.5
 pi_hole_x_span = 58;
 pi_hole_y_span = 49;
 
-pi_x_left  = (pod_width - pi_hole_x_span) / 2;  // 21.5mm
-pi_x_right = pi_x_left + pi_hole_x_span;         // 79.5mm
+pi_x_left  = 6;
+pi_x_right = pi_x_left + pi_hole_x_span;          // 64mm
 
-pi_y_front = rail_w + 2;                          // 7mm from non-USB side
-pi_y_rear  = pi_y_front + pi_hole_y_span;         // 56mm
+pi_y_front = (pod_depth - pi_hole_y_span) / 2;   // 10.5mm — centered on Y
+pi_y_rear  = pi_y_front + pi_hole_y_span;         // 59.5mm
 
 pi_holes = [
     [pi_x_left,  pi_y_front],

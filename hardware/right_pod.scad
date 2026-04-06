@@ -50,14 +50,14 @@ standoff_hole = 2.7; // M2.5
 pi_hole_x_span = 58;
 pi_hole_y_span = 49;
 
-pi_x_left  = (pod_width - pi_hole_x_span) / 2;  // 21.5mm from left rail
-pi_x_right = pi_x_left + pi_hole_x_span;         // 79.5mm from left rail
+// Pi 5 holes offset toward non-USB edge (X axis)
+// 6mm from outer (left/non-USB) rail = rail_w(5) + 1mm clearance
+pi_x_left  = 6;                                   // 6mm from outer rail
+pi_x_right = pi_x_left + pi_hole_x_span;          // 64mm — 32mm clearance to inner (USB) rail
 
-// Pi 5 holes offset toward non-USB edge
-// pi_y_front = rail_w + 2mm clearance from non-USB side rail
-pi_y_front = rail_w + 2;                          // 7mm from non-USB side
-pi_y_rear  = pi_y_front + pi_hole_y_span;         // 56mm
-pi_y_mid   = (pi_y_front + pi_y_rear) / 2;        // 31.5mm — center structural rib
+pi_y_front = (pod_depth - pi_hole_y_span) / 2;   // 10.5mm — centered on Y
+pi_y_rear  = pi_y_front + pi_hole_y_span;         // 59.5mm
+pi_y_mid   = (pi_y_front + pi_y_rear) / 2;        // 35mm — center structural rib
 
 // Pi board edges (for port position calculations)
 // Board depth = 58mm, hole_y_span = 49mm, so board overhangs holes by (58-49)/2 = 4.5mm each side

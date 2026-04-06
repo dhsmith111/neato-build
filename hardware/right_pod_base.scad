@@ -24,9 +24,9 @@ pi_hole_y_span = 49;
 pi_x_left  = (pod_width - pi_hole_x_span) / 2;  // 21.5mm
 pi_x_right = pi_x_left + pi_hole_x_span;         // 79.5mm
 
-pi_y_front = (pod_depth - pi_hole_y_span) / 2;   // 10.5mm
-pi_y_rear  = pi_y_front + pi_hole_y_span;         // 59.5mm
-pi_y_mid   = (pi_y_front + pi_y_rear) / 2;        // 35mm
+pi_y_front = rail_w + 2;                          // 7mm from non-USB side
+pi_y_rear  = pi_y_front + pi_hole_y_span;         // 56mm
+pi_y_mid   = (pi_y_front + pi_y_rear) / 2;        // 31.5mm
 
 rib_positions = [pi_y_front, pi_y_mid, pi_y_rear];
 

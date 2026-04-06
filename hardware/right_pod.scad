@@ -53,9 +53,11 @@ pi_hole_y_span = 49;
 pi_x_left  = (pod_width - pi_hole_x_span) / 2;  // 21.5mm from left rail
 pi_x_right = pi_x_left + pi_hole_x_span;         // 79.5mm from left rail
 
-pi_y_front = (pod_depth - pi_hole_y_span) / 2;   // 10.5mm from front (NIC side)
-pi_y_rear  = pi_y_front + pi_hole_y_span;         // 59.5mm from front (USB side)
-pi_y_mid   = (pi_y_front + pi_y_rear) / 2;        // 35mm — center structural rib
+// Pi 5 holes offset toward non-USB edge
+// pi_y_front = rail_w + 2mm clearance from non-USB side rail
+pi_y_front = rail_w + 2;                          // 7mm from non-USB side
+pi_y_rear  = pi_y_front + pi_hole_y_span;         // 56mm
+pi_y_mid   = (pi_y_front + pi_y_rear) / 2;        // 31.5mm — center structural rib
 
 // Pi board edges (for port position calculations)
 // Board depth = 58mm, hole_y_span = 49mm, so board overhangs holes by (58-49)/2 = 4.5mm each side

@@ -42,8 +42,16 @@ with screws through component mounting holes.
 
 ### Right Pod — Pi 5 + AI HAT+ 2
 - Hole pattern: 58x49mm, M2.5 (standoff_hole = 2.7mm)
-- Pi 5 board: 85x58mm — long axis (85mm) runs horizontally across chassis
-- USB/ethernet ports face inward (toward center vent) = right side of pod (high Y)
+- Pi 5 board: 85x58mm
+- **Orientation:** long axis (85mm) runs along X (across chassis width)
+  - USB/ethernet ports on SHORT edge, facing inward = high X (inner/vent side of pod)
+  - Non-USB short edge faces outer (left) rail = low X
+- **Pi holes are NOT centered on the 85mm axis**
+  - Physically measured: holes offset toward non-USB edge
+  - `pi_x_left = 6mm` (rail_w + 1mm clearance from outer rail)
+  - `pi_x_right = 64mm` (32mm clearance to inner/USB rail)
+- **Y axis:** holes centered on pod depth
+  - `pi_y_front = 10.5mm`, `pi_y_rear = 59.5mm`
 - NIC side = low Y (near Y=0), USB2 side = high Y (near pod_depth)
 
 **Outer (left) side:** full corner posts + center post + mid + top horizontals

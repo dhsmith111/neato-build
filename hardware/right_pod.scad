@@ -50,10 +50,9 @@ standoff_hole = 2.7; // M2.5
 pi_hole_x_span = 58;
 pi_hole_y_span = 49;
 
-// Pi 5 holes offset toward non-USB edge (X axis)
-// 6mm from outer (left/non-USB) rail = rail_w(5) + 1mm clearance
-pi_x_left  = 6;                                   // 6mm from outer rail
-pi_x_right = pi_x_left + pi_hole_x_span;          // 64mm — 32mm clearance to inner (USB) rail
+// Pi 5 holes offset toward non-USB edge (X axis), physically measured
+pi_x_left  = 10;                                  // 10mm from outer (non-USB) rail
+pi_x_right = pi_x_left + pi_hole_x_span;          // 68mm — 28mm clearance to inner (USB) rail
 
 pi_y_front = (pod_depth - pi_hole_y_span) / 2;   // 10.5mm — centered on Y
 pi_y_rear  = pi_y_front + pi_hole_y_span;         // 59.5mm

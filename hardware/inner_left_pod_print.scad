@@ -115,12 +115,12 @@ union() {
     }
 }
 
-// Left side — flat, offset in X
-translate([pod_width + 10, 0, 0])
+// Left side — flat on bed, offset in Y from base
+translate([0, pod_depth + 10, 0])
 rotate([0, -90, 0])
 side();
 
-// Right side — flat, offset further in X
-translate([pod_width + 10, pod_depth + 10, 0])
+// Right side — flat on bed, offset further in Y
+translate([0, pod_depth * 2 + 20, 0])
 rotate([0, -90, 0])
 side();

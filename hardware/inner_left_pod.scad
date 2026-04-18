@@ -17,8 +17,8 @@
 // Relay board: 50.5mm wide x 38.5mm deep. 3mm clearance each side.
 // Inner space = pod_width - rail_w*2 = 67 - 10 = 57mm (3mm each side of 50.5mm board)
 // Inner depth = pod_depth - rail_w*2 = 55 - 10 = 45mm (3mm each side of 38.5mm board)
-pod_width  = 67;
-pod_depth  = 55;
+pod_width  = 55;
+pod_depth  = 67;
 pod_height = 66;
 
 rail_w = 5;
@@ -72,27 +72,25 @@ module ribbed_bottom() {
 }
 
 module side_rails() {
+    wall_h = pod_height / 2;  // half height — posts + single horizontal beam only
+
     // Left side
-    cube([rail_w, rail_w, pod_height]);                              // back post
+    cube([rail_w, rail_w, wall_h]);                                  // back post
     translate([0, pod_depth - rail_w, 0])
-        cube([rail_w, rail_w, pod_height]);                          // front post
+        cube([rail_w, rail_w, wall_h]);                              // front post
     translate([0, pod_depth / 2 - rail_w / 2, 0])
-        cube([rail_w, rail_w, pod_height]);                          // center post
-    translate([0, 0, pod_height / 2 - rail_w / 2])
-        cube([rail_w, pod_depth, rail_w]);                           // mid horizontal
-    translate([0, 0, pod_height - rail_w])
+        cube([rail_w, rail_w, wall_h]);                              // center post
+    translate([0, 0, wall_h - rail_w])
         cube([rail_w, pod_depth, rail_w]);                           // top horizontal
 
     // Right side (mirror)
     translate([pod_width - rail_w, 0, 0])
-        cube([rail_w, rail_w, pod_height]);                          // back post
+        cube([rail_w, rail_w, wall_h]);                              // back post
     translate([pod_width - rail_w, pod_depth - rail_w, 0])
-        cube([rail_w, rail_w, pod_height]);                          // front post
+        cube([rail_w, rail_w, wall_h]);                              // front post
     translate([pod_width - rail_w, pod_depth / 2 - rail_w / 2, 0])
-        cube([rail_w, rail_w, pod_height]);                          // center post
-    translate([pod_width - rail_w, 0, pod_height / 2 - rail_w / 2])
-        cube([rail_w, pod_depth, rail_w]);                           // mid horizontal
-    translate([pod_width - rail_w, 0, pod_height - rail_w])
+        cube([rail_w, rail_w, wall_h]);                              // center post
+    translate([pod_width - rail_w, 0, wall_h - rail_w])
         cube([rail_w, pod_depth, rail_w]);                           // top horizontal
 }
 

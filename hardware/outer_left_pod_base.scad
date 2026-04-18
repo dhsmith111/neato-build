@@ -12,8 +12,7 @@
 pod_width  = 72;
 pod_depth  = 71;
 
-rail_w       = 5;
-outer_rail_w = 10;
+rail_w = 5;
 rib_w        = 12;
 
 standoff_h    = 9;
@@ -47,10 +46,10 @@ yahboom_holes = [
 // Outer (left) side: back, front
 // Inner (right) side: back, front
 boss_locations = [
-    [outer_rail_w/2,          rail_w/2              ],  // outer back
-    [outer_rail_w/2,          pod_depth - rail_w/2  ],  // outer front
-    [pod_width - rail_w/2,    rail_w/2              ],  // inner back
-    [pod_width - rail_w/2,    pod_depth - rail_w/2  ],  // inner front
+    [rail_w/2,             rail_w/2              ],  // outer back
+    [rail_w/2,             pod_depth - rail_w/2  ],  // outer front
+    [pod_width - rail_w/2, rail_w/2              ],  // inner back
+    [pod_width - rail_w/2, pod_depth - rail_w/2  ],  // inner front
 ];
 
 // ============================================================

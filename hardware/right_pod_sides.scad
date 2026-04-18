@@ -24,8 +24,9 @@ port_post_nic_usb3  = 22;
 port_post_usb3_usb2 = 45;
 thin_post = 2;
 
-// Socket dimensions — fit over 5x5mm bosses with 0.2mm clearance
-socket_size = 5.2;
+// Socket dimensions — fit over 4x4mm bosses with 0.2mm clearance
+// 4.2mm socket fits inside 5mm rail with 0.4mm wall each side
+socket_size  = 4.2;
 socket_depth = 6.2;  // slightly deeper than boss for easy assembly
 
 // ============================================================

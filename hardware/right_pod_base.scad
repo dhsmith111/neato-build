@@ -20,7 +20,8 @@ standoff_od   = 6;
 standoff_hole = 2.7; // M2.5
 
 // Boss dimensions — raised square pegs on base, fit into sockets in side frame
-boss_size  = 5;   // 5x5mm square
+// 4mm square fits inside 5mm rail with 0.5mm wall each side
+boss_size  = 4;   // 4x4mm square
 boss_h     = 6;   // 6mm tall
 
 pi_hole_x_span = 58;

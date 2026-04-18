@@ -99,8 +99,10 @@ module inner_side() {
 // Posts print horizontally — stronger and faster.
 // ============================================================
 
-rotate([90, 0, 0])
-translate([0, 0, -pod_depth])
+// Rotate so frame lies flat on its outer (left) face.
+// After rotation, translate up so nothing is below Z=0.
+translate([pod_height, 0, 0])
+rotate([0, 90, 0])
 union() {
     outer_side();
     inner_side();

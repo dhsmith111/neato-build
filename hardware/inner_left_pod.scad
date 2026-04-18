@@ -14,11 +14,11 @@
 // PARAMETERS
 // ============================================================
 
-// Relay board: 50.5mm wide x 38.5mm deep. 3mm clearance each side.
-// Inner space = pod_width - rail_w*2 = 67 - 10 = 57mm (3mm each side of 50.5mm board)
-// Inner depth = pod_depth - rail_w*2 = 67 - 10 = 57mm (board is 38.5mm deep, extra space ok)
+// Relay board: 50.5mm long x 38.5mm wide (walls on long axis).
+// Walls on X axis (long board dimension): pod_width = 50.5 + 3 + 3 + 5 + 5 = 67mm
+// Open on Y axis (short board dimension): pod_depth = 38.5 + 3 + 3 = 45mm
 pod_width  = 67;
-pod_depth  = 67;
+pod_depth  = 45;
 pod_height = 66;
 
 rail_w = 5;
@@ -31,8 +31,8 @@ standoff_hole = 3.2; // M3 for relay
 // Relay hole pattern: 45.0mm x 33.5mm (standard 2-ch relay module form factor)
 // Standoffs placed at exactly these positions, centered in pod.
 // Ribs move to match standoffs.
-relay_hole_x_span = 45.0;
-relay_hole_y_span = 33.5;
+relay_hole_x_span = 45.0;  // long span — runs along X between walls
+relay_hole_y_span = 33.5;  // short span — runs along Y open direction
 
 relay_x_left  = (pod_width - relay_hole_x_span) / 2;  // 8.9mm from left
 relay_x_right = relay_x_left + relay_hole_x_span;     // 61.1mm from left

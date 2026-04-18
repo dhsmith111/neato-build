@@ -94,8 +94,12 @@ module inner_side() {
 
 // ============================================================
 // MAIN
+// Rotated so frame lies flat on its outer face for printing.
+// Posts print horizontally — stronger and faster.
 // ============================================================
 
+rotate([90, 0, 0])
+translate([0, 0, -pod_depth])
 union() {
     outer_side();
     inner_side();

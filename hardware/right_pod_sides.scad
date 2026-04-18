@@ -99,13 +99,13 @@ module inner_side() {
 // Posts print horizontally — stronger layer adhesion, faster print.
 // ============================================================
 
-// Outer side — rotate flat, flip so outer face is on bed
+// Outer side — rotate flat, translate to keep in positive X
 translate([pod_height, 0, 0])
 rotate([0, 90, 0])
 outer_side();
 
-// Inner side — rotate flat, flip so inner face is on bed, offset in Y
-translate([pod_height, pod_depth + 10, 0])
+// Inner side — same X shift, offset in Y to sit beside outer side
+translate([pod_height + (pod_width - rail_w), pod_depth + 10, 0])
 rotate([0, 90, 0])
 translate([-(pod_width - rail_w), 0, 0])
 inner_side();

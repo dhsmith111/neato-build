@@ -33,14 +33,14 @@
 // Pi board: 85mm wide x 58mm deep. 3mm clearance each side.
 // Inner space = pod_width - rail_w*2 = 101 - 10 = 91mm (3mm each side of 85mm board)
 // Inner depth = pod_depth - rail_w*2 = 70 - 10 = 60mm (1mm each side of 58mm board — tight but ok)
-pod_width  = 101;  // across chassis
+pod_width  = 103;  // across chassis (1mm clearance added each side)
 pod_depth  = 70;   // outward from chassis
 pod_height = 66;   // up the chassis surface
 
 rail_w = 5;
 rib_w  = 12; // wide enough that standoff (6mm dia) sits fully centered with 3mm to spare each side
 
-standoff_h    = 18;
+standoff_h    = 9;   // halved from 18mm
 standoff_od   = 6;
 standoff_hole = 2.7; // M2.5
 
@@ -66,16 +66,14 @@ pi_board_y_far  = pi_y_rear  + 4.5;  // USB/far edge of board in pod Y (~64mm)
 // Thin inter-port posts on inner (right) side rail
 // Measured from NIC-side board edge: NIC/USB3 gap at 19mm, USB3/USB2 gap at 37mm
 // Board NIC edge in pod Y = pi_board_y_near = pi_y_front - 4.5 = ~6mm
-port_post_nic_usb3 = pi_board_y_near + 19;  // ~25mm in pod Y
-port_post_usb3_usb2 = pi_board_y_near + 39; // ~45mm in pod Y (shifted 2mm toward USB2)
+// Gap positions measured directly from ruler with frame in place
+port_post_nic_usb3  = 22;  // NIC/USB3 gap center in pod Y
+port_post_usb3_usb2 = 45;  // USB3/USB2 gap center in pod Y
 
-// Port zone Z heights: board at 23mm, ports ~15mm tall → zone is 23-38mm
-// Lower post segment: 0 to 20mm (below board)
-// Upper post segment: 42mm to pod_height (above ports)
-port_z_lower = 20;
-port_z_upper = 42;
+// Mid beam raised to 32mm — board at 14mm (5+9), ports span 14-29mm, 3mm clearance
+mid_beam_z = 32;
 
-thin_post = 3; // width of inter-port posts
+thin_post = 2; // reduced from 3mm for better port clearance
 
 // Ribs centered exactly on standoff Y positions
 rib_positions = [pi_y_front, pi_y_mid, pi_y_rear];
@@ -114,7 +112,7 @@ module side_rails() {
         cube([rail_w, rail_w, pod_height]);                          // front post
     translate([0, pod_depth / 2 - rail_w / 2, 0])
         cube([rail_w, rail_w, pod_height]);                          // center post
-    translate([0, 0, pod_height / 2 - rail_w / 2])
+    translate([0, 0, mid_beam_z])
         cube([rail_w, pod_depth, rail_w]);                           // mid horizontal
     translate([0, 0, pod_height - rail_w])
         cube([rail_w, pod_depth, rail_w]);                           // top horizontal
@@ -129,17 +127,17 @@ module side_rails() {
     // Thin inter-port posts: full height up to mid horizontal beam
     // Placed in gaps between NIC/USB3 and USB3/USB2 port housings
     translate([pod_width - thin_post, port_post_nic_usb3 - thin_post/2, 0])
-        cube([thin_post, thin_post, pod_height / 2 - rail_w / 2]);   // NIC/USB3 gap post
+        cube([thin_post, thin_post, mid_beam_z]);                    // NIC/USB3 gap post
     translate([pod_width - thin_post, port_post_usb3_usb2 - thin_post/2, 0])
-        cube([thin_post, thin_post, pod_height / 2 - rail_w / 2]);   // USB3/USB2 gap post
+        cube([thin_post, thin_post, mid_beam_z]);                    // USB3/USB2 gap post
 
-    // Mid horizontal beam at pod mid-height — supported by corner posts
-    translate([pod_width - rail_w, 0, pod_height / 2 - rail_w / 2])
+    // Mid horizontal beam — raised to clear ports with shorter standoffs
+    translate([pod_width - rail_w, 0, mid_beam_z])
         cube([rail_w, pod_depth, rail_w]);                           // mid horizontal
 
     // Single center post above mid beam — supports top horizontal
-    translate([pod_width - thin_post, (port_post_nic_usb3 + port_post_usb3_usb2) / 2 - thin_post/2, pod_height / 2 + rail_w / 2])
-        cube([thin_post, thin_post, pod_height / 2 - rail_w]);       // center upper post
+    translate([pod_width - thin_post, (port_post_nic_usb3 + port_post_usb3_usb2) / 2 - thin_post/2, mid_beam_z + rail_w])
+        cube([thin_post, thin_post, pod_height - mid_beam_z - rail_w * 2]); // center upper post
 
     // Top horizontal beam
     translate([pod_width - rail_w, 0, pod_height - rail_w])

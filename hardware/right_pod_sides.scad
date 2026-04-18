@@ -99,12 +99,13 @@ module inner_side() {
 // Posts print horizontally — stronger layer adhesion, faster print.
 // ============================================================
 
-// Outer side — rotate 90° on X, translate +pod_height in Y to stay above zero
+// Outer side — spans X: 0 to rail_w, lies flat after rotate+translate
 translate([0, pod_height, 0])
 rotate([90, 0, 0])
 outer_side();
 
-// Inner side — offset in X to print side by side
-translate([pod_width + 10, pod_height, 0])
+// Inner side — shift geometry to X=0 first, then place next to outer side
+translate([rail_w + 10, pod_height, 0])
 rotate([90, 0, 0])
+translate([-(pod_width - rail_w), 0, 0])
 inner_side();

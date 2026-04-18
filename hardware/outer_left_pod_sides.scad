@@ -11,11 +11,10 @@
 // PARAMETERS (must match outer_left_pod_base.scad)
 // ============================================================
 
-pod_width  = 77;
+pod_width  = 72;
 pod_depth  = 71;
 
 rail_w       = 5;
-outer_rail_w = 10;
 
 outer_wall_h = 66 * 0.75;  // ~50mm — protection on exposed edge
 inner_wall_h = 66 * 0.50;  // ~33mm — wire routing access
@@ -37,17 +36,20 @@ module outer_side() {
     difference() {
         union() {
             // Back post
-            cube([outer_rail_w, rail_w, outer_wall_h]);
+            cube([rail_w, rail_w, outer_wall_h]);
             // Front post
             translate([0, pod_depth - rail_w, 0])
-                cube([outer_rail_w, rail_w, outer_wall_h]);
-            // Top horizontal
+                cube([rail_w, rail_w, outer_wall_h]);
+            // Mid horizontal beam
+            translate([0, 0, outer_wall_h / 2 - rail_w / 2])
+                cube([rail_w, pod_depth, rail_w]);
+            // Top horizontal beam
             translate([0, 0, outer_wall_h - rail_w])
-                cube([outer_rail_w, pod_depth, rail_w]);
+                cube([rail_w, pod_depth, rail_w]);
         }
         // Sockets in base of posts
-        translate([outer_rail_w/2, rail_w/2, 0])           socket();  // back
-        translate([outer_rail_w/2, pod_depth - rail_w/2, 0]) socket();  // front
+        translate([rail_w/2, rail_w/2, 0])           socket();  // back
+        translate([rail_w/2, pod_depth - rail_w/2, 0]) socket();  // front
     }
 }
 

@@ -9,7 +9,7 @@
 // PARAMETERS (must match outer_left_pod_sides.scad)
 // ============================================================
 
-pod_width  = 77;
+pod_width  = 72;
 pod_depth  = 71;
 
 rail_w       = 5;
@@ -58,8 +58,8 @@ boss_locations = [
 // ============================================================
 
 module ribbed_bottom() {
-    // Outer (left) edge — extra thick
-    cube([outer_rail_w, pod_depth, rail_w]);
+    // Outer (left) edge
+    cube([rail_w, pod_depth, rail_w]);
     // Inner (right) edge
     translate([pod_width - rail_w, 0, 0])
         cube([rail_w, pod_depth, rail_w]);

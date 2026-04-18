@@ -104,8 +104,8 @@ translate([pod_height, 0, 0])
 rotate([0, 90, 0])
 outer_side();
 
-// Inner side — rotate flat, flip so inner face is on bed, offset in Y
-translate([pod_height, pod_depth + 10, 0])
+// Inner side — rotate flat, shift geometry to Z=0, offset in Y
+translate([pod_height, pod_depth + 10, pod_width - rail_w])
 rotate([0, 90, 0])
 translate([-(pod_width - rail_w), 0, 0])
 inner_side();

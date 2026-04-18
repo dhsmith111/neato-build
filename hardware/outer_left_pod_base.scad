@@ -20,8 +20,6 @@ standoff_h    = 9;
 standoff_od   = 6;
 standoff_hole = 2.7; // M2.5
 
-cable_notch_w = 25;
-cable_notch_d = 20;
 
 boss_size = 4;
 boss_h    = 6;
@@ -71,15 +69,10 @@ module ribbed_bottom() {
     translate([0, pod_depth - rail_w, 0])
         cube([pod_width, rail_w, rail_w]);
 
-    // Ribs with battery cable notch on inner (right) edge
+    // Ribs — gaps between ribs provide cable routing space
     for (y_center = rib_positions) {
-        y = y_center - rib_w / 2;
-        difference() {
-            translate([0, y, 0])
-                cube([pod_width, rib_w, rail_w]);
-            translate([pod_width - cable_notch_w, y - 0.1, -0.1])
-                cube([cable_notch_w + 0.1, rib_w + 0.2, rail_w + 0.2]);
-        }
+        translate([0, y_center - rib_w / 2, 0])
+            cube([pod_width, rib_w, rail_w]);
     }
 }
 

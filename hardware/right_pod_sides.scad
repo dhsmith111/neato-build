@@ -95,15 +95,16 @@ module inner_side() {
 
 // ============================================================
 // MAIN
-// Rotated so frame lies flat on its outer face for printing.
-// Posts print horizontally — stronger and faster.
+// Each side rotated 90° on X axis so it lies flat on the print bed.
+// Posts print horizontally — stronger layer adhesion, faster print.
 // ============================================================
 
-// Rotate so frame lies flat on its outer (left) face.
-// After rotation, translate up so nothing is below Z=0.
-translate([pod_height, 0, 0])
-rotate([0, 90, 0])
-union() {
-    outer_side();
-    inner_side();
-}
+// Outer side — rotated flat, translated above Z=0
+translate([0, pod_height, 0])
+rotate([90, 0, 0])
+outer_side();
+
+// Inner side — offset in X so both sides print side by side
+translate([pod_width + 10, pod_height, 0])
+rotate([90, 0, 0])
+inner_side();

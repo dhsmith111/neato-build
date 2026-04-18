@@ -16,11 +16,11 @@
 // PARAMETERS
 // ============================================================
 
-// Yahboom board: 65mm wide x 56mm deep. 3mm clearance each side.
-// Inner space = pod_width - outer_rail_w - rail_w = 86 - 10 - 5 = 71mm (3mm each side of 65mm board)
-// Inner depth = pod_depth - rail_w*2 = 68 - 10 = 58mm (1mm each side of 56mm board — tight but ok)
-pod_width  = 86;
-pod_depth  = 68;
+// Yahboom board: 65mm long x 56mm wide (rotated 90° — long axis runs along Y/depth).
+// Walls on X axis (short board dimension): pod_width = 56 + 3 + 3 + outer_rail_w + rail_w = 77mm
+// Open on Y axis (long board dimension): pod_depth = 65 + 3 + 3 = 71mm
+pod_width  = 77;
+pod_depth  = 71;
 pod_height = 66;
 
 rail_w       = 5;
@@ -28,18 +28,18 @@ outer_rail_w = 10; // extra thick exposed outer edge
 
 rib_w = 12; // wide enough that standoff (6mm dia) sits fully centered with 3mm to spare each side
 
-standoff_h    = 18;
+standoff_h    = 9;
 standoff_od   = 6;
 standoff_hole = 2.7; // M2.5 for Yahboom
 
 cable_notch_w = 25;
 cable_notch_d = 20;
 
-// Yahboom hole pattern: 58mm x 49mm
+// Yahboom hole pattern: 49mm x 58mm (rotated — short span on X, long span on Y)
 // Standoffs placed at exactly these positions, centered in pod.
 // Ribs move to match standoffs.
-yahboom_hole_x_span = 58;
-yahboom_hole_y_span = 49;
+yahboom_hole_x_span = 49;
+yahboom_hole_y_span = 58;
 
 yahboom_x_left  = (pod_width - yahboom_hole_x_span) / 2;  // 18.5mm from left
 yahboom_x_right = yahboom_x_left + yahboom_hole_x_span;   // 76.5mm from left
@@ -88,28 +88,23 @@ module ribbed_bottom() {
 }
 
 module side_rails() {
-    // Outer (left) side — extra thick, fully braced
-    cube([outer_rail_w, rail_w, pod_height]);                              // back post
+    outer_wall_h = pod_height * 0.75;  // ~50mm — protection on exposed edge
+    inner_wall_h = pod_height * 0.50;  // ~33mm — wire routing access
+
+    // Outer (left) side — extra thick, taller, no center post
+    cube([outer_rail_w, rail_w, outer_wall_h]);                            // back post
     translate([0, pod_depth - rail_w, 0])
-        cube([outer_rail_w, rail_w, pod_height]);                          // front post
-    translate([0, pod_depth / 2 - rail_w / 2, 0])
-        cube([outer_rail_w, rail_w, pod_height]);                          // center post
-    translate([0, 0, pod_height / 2 - rail_w / 2])
-        cube([outer_rail_w, pod_depth, rail_w]);                           // mid horizontal
-    translate([0, 0, pod_height - rail_w])
+        cube([outer_rail_w, rail_w, outer_wall_h]);                        // front post
+    translate([0, 0, outer_wall_h - rail_w])
         cube([outer_rail_w, pod_depth, rail_w]);                           // top horizontal
 
-    // Inner (right) side — standard
+    // Inner (right) side — half height, no center post, wire routing access
     translate([pod_width - rail_w, 0, 0])
-        cube([rail_w, rail_w, pod_height]);                          // back post
+        cube([rail_w, rail_w, inner_wall_h]);                              // back post
     translate([pod_width - rail_w, pod_depth - rail_w, 0])
-        cube([rail_w, rail_w, pod_height]);                          // front post
-    translate([pod_width - rail_w, pod_depth / 2 - rail_w / 2, 0])
-        cube([rail_w, rail_w, pod_height]);                          // center post
-    translate([pod_width - rail_w, 0, pod_height / 2 - rail_w / 2])
-        cube([rail_w, pod_depth, rail_w]);                           // mid horizontal
-    translate([pod_width - rail_w, 0, pod_height - rail_w])
-        cube([rail_w, pod_depth, rail_w]);                           // top horizontal
+        cube([rail_w, rail_w, inner_wall_h]);                              // front post
+    translate([pod_width - rail_w, 0, inner_wall_h - rail_w])
+        cube([rail_w, pod_depth, rail_w]);                                 // top horizontal
 }
 
 module standoff(h, hole_d) {

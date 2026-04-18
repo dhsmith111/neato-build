@@ -63,33 +63,34 @@ module outer_side() {
     }
 }
 
+// Inner side rewritten to start at X=0 (same as outer_side)
+// so rotation/translation is identical for both
 module inner_side() {
     difference() {
         union() {
             // Back corner post (NIC side)
-            translate([pod_width - rail_w, 0, 0])
-                cube([rail_w, rail_w, pod_height]);
+            cube([rail_w, rail_w, pod_height]);
             // Front corner post (USB side)
-            translate([pod_width - rail_w, pod_depth - rail_w, 0])
+            translate([0, pod_depth - rail_w, 0])
                 cube([rail_w, rail_w, pod_height]);
             // Thin inter-port posts (reach up to mid beam)
-            translate([pod_width - thin_post, port_post_nic_usb3 - thin_post/2, 0])
+            translate([0, port_post_nic_usb3 - thin_post/2, 0])
                 cube([thin_post, thin_post, mid_beam_z]);
-            translate([pod_width - thin_post, port_post_usb3_usb2 - thin_post/2, 0])
+            translate([0, port_post_usb3_usb2 - thin_post/2, 0])
                 cube([thin_post, thin_post, mid_beam_z]);
             // Mid horizontal beam
-            translate([pod_width - rail_w, 0, mid_beam_z])
+            translate([0, 0, mid_beam_z])
                 cube([rail_w, pod_depth, rail_w]);
             // Single center post above mid beam
-            translate([pod_width - thin_post, (port_post_nic_usb3 + port_post_usb3_usb2)/2 - thin_post/2, mid_beam_z + rail_w])
+            translate([0, (port_post_nic_usb3 + port_post_usb3_usb2)/2 - thin_post/2, mid_beam_z + rail_w])
                 cube([thin_post, thin_post, pod_height - mid_beam_z - rail_w*2]);
             // Top horizontal beam
-            translate([pod_width - rail_w, 0, pod_height - rail_w])
+            translate([0, 0, pod_height - rail_w])
                 cube([rail_w, pod_depth, rail_w]);
         }
         // Sockets in base of corner posts only
-        translate([pod_width - rail_w/2, rail_w/2, 0])           socket();  // back
-        translate([pod_width - rail_w/2, pod_depth - rail_w/2, 0]) socket();  // front
+        translate([rail_w/2, rail_w/2, 0])           socket();  // back
+        translate([rail_w/2, pod_depth - rail_w/2, 0]) socket();  // front
     }
 }
 
@@ -104,8 +105,7 @@ translate([pod_height, 0, 0])
 rotate([0, 90, 0])
 outer_side();
 
-// Inner side — rotate flat, flip so inner face is on bed, offset in Y
+// Inner side — rotate flat, offset in Y to separate from outer side
 translate([pod_height, pod_depth + 10, 0])
 rotate([0, 90, 0])
-translate([-(pod_width - rail_w), 0, 0])
 inner_side();

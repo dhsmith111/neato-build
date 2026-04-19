@@ -1,27 +1,31 @@
-// Neato XV Signature Pro - Outer Left Pod BASE
-// Print flat (ribbed face down), no supports needed.
-// Has 4x4x6mm raised bosses at all 4 post locations.
-// Bosses fit into matching sockets in outer_left_pod_sides.scad.
+// Neato XV Signature Pro - Outer Left Pod
+// Mounts: Yahboom PD Power Expansion Board
+// Location: outer left (exposed edge), viewed from behind robot
+// One-piece print — flat on bed, no supports needed.
 //
-// PRINT ORIENTATION: ribbed bottom face flat on bed, standoffs point up.
+// ORIENTATION (as mounted on robot):
+//   Bottom face = velcros to robot chassis
+//   Walls on short board axis (56mm), open on long axis (65mm)
+//   Outer (left/exposed) wall: 75% height, mid + top beams
+//   Inner (right/vent) wall: 50% height, top beam only
 
 // ============================================================
-// PARAMETERS (must match outer_left_pod_sides.scad)
+// PARAMETERS
 // ============================================================
 
 pod_width  = 72;
 pod_depth  = 71;
+pod_height = 66;
 
 rail_w = 5;
-rib_w        = 12;
+rib_w  = 12;
+
+outer_wall_h = pod_height * 0.75;  // ~50mm — protection on exposed edge
+inner_wall_h = pod_height * 0.50;  // ~33mm — wire routing access
 
 standoff_h    = 9;
 standoff_od   = 6;
 standoff_hole = 2.7; // M2.5
-
-
-boss_size = 4;
-boss_h    = 6;
 
 yahboom_hole_x_span = 49;
 yahboom_hole_y_span = 58;
@@ -42,36 +46,40 @@ yahboom_holes = [
     [yahboom_x_right, yahboom_y_rear ],
 ];
 
-// Boss locations — center of each post footprint
-// Outer (left) side: back, front
-// Inner (right) side: back, front
-boss_locations = [
-    [rail_w/2,             rail_w/2              ],  // outer back
-    [rail_w/2,             pod_depth - rail_w/2  ],  // outer front
-    [pod_width - rail_w/2, rail_w/2              ],  // inner back
-    [pod_width - rail_w/2, pod_depth - rail_w/2  ],  // inner front
-];
-
 // ============================================================
 // MODULES
 // ============================================================
 
 module ribbed_bottom() {
-    // Outer (left) edge
     cube([rail_w, pod_depth, rail_w]);
-    // Inner (right) edge
     translate([pod_width - rail_w, 0, 0])
         cube([rail_w, pod_depth, rail_w]);
-    // Back edge
     cube([pod_width, rail_w, rail_w]);
-    // Front edge
     translate([0, pod_depth - rail_w, 0])
         cube([pod_width, rail_w, rail_w]);
-
-    // Ribs — gaps between ribs provide cable routing space
     for (y_center = rib_positions) {
         translate([0, y_center - rib_w / 2, 0])
             cube([pod_width, rib_w, rail_w]);
+    }
+}
+
+module outer_wall() {
+    cube([rail_w, rail_w, outer_wall_h]);
+    translate([0, pod_depth - rail_w, 0])
+        cube([rail_w, rail_w, outer_wall_h]);
+    translate([0, 0, outer_wall_h / 2 - rail_w / 2])
+        cube([rail_w, pod_depth, rail_w]);
+    translate([0, 0, outer_wall_h - rail_w])
+        cube([rail_w, pod_depth, rail_w]);
+}
+
+module inner_wall() {
+    translate([pod_width - rail_w, 0, 0]) {
+        cube([rail_w, rail_w, inner_wall_h]);
+        translate([0, pod_depth - rail_w, 0])
+            cube([rail_w, rail_w, inner_wall_h]);
+        translate([0, 0, inner_wall_h - rail_w])
+            cube([rail_w, pod_depth, rail_w]);
     }
 }
 
@@ -88,11 +96,8 @@ module standoff(h, hole_d) {
 
 union() {
     ribbed_bottom();
-
-    for (b = boss_locations) {
-        translate([b[0] - boss_size/2, b[1] - boss_size/2, rail_w])
-            cube([boss_size, boss_size, boss_h]);
-    }
+    outer_wall();
+    inner_wall();
 
     for (h = yahboom_holes) {
         translate([h[0], h[1], rail_w])

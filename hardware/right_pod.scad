@@ -141,13 +141,17 @@ module standoff(h, hole_d) {
 // MAIN
 // ============================================================
 
-union() {
-    ribbed_bottom();
-    outer_wall();
-    inner_wall();
+module right_pod() {
+    union() {
+        ribbed_bottom();
+        outer_wall();
+        inner_wall();
 
-    for (h = pi_holes) {
-        translate([h[0], h[1], rail_w])
-            standoff(standoff_h, standoff_hole);
+        for (h = pi_holes) {
+            translate([h[0], h[1], rail_w])
+                standoff(standoff_h, standoff_hole);
+        }
     }
 }
+
+right_pod();

@@ -102,13 +102,17 @@ module standoff(h, hole_d) {
 // MAIN
 // ============================================================
 
-union() {
-    ribbed_bottom();
-    side_wall(0, 1);
-    side_wall(pod_width - rail_w, -1);
+module inner_left_pod() {
+    union() {
+        ribbed_bottom();
+        side_wall(0, 1);
+        side_wall(pod_width - rail_w, -1);
 
-    for (h = relay_holes) {
-        translate([h[0], h[1], rail_w])
-            standoff(standoff_h, standoff_hole);
+        for (h = relay_holes) {
+            translate([h[0], h[1], rail_w])
+                standoff(standoff_h, standoff_hole);
+        }
     }
 }
+
+inner_left_pod();

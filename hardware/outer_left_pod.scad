@@ -111,13 +111,18 @@ module standoff(h, hole_d) {
 // MAIN
 // ============================================================
 
-union() {
-    ribbed_bottom();
-    outer_wall();
-    inner_wall();
+module outer_left_pod() {
+    union() {
+        ribbed_bottom();
+        outer_wall();
+        inner_wall();
 
-    for (h = yahboom_holes) {
-        translate([h[0], h[1], rail_w])
-            standoff(standoff_h, standoff_hole);
+        for (h = yahboom_holes) {
+            translate([h[0], h[1], rail_w])
+                standoff(standoff_h, standoff_hole);
+        }
     }
+}
+
+outer_left_pod();
 }

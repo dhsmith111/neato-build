@@ -50,7 +50,7 @@ pi_holes = [
 ];
 
 // Port-aware inner rail gap positions (measured from ruler)
-port_post_nic_usb3  = 22;
+port_post_nic_usb3  = 28;
 port_post_usb3_usb2 = 45;
 thin_post = 2;
 

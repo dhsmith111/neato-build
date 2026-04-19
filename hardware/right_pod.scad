@@ -71,6 +71,14 @@ module ribbed_bottom() {
     }
 }
 
+// Gusset: triangle in XZ plane, 3mm thick in Y
+// X=0 at post inner face, Z=0 at base top, extends +X into pod and +Z up post
+module gusset() {
+    rotate([90, 0, 0])
+        linear_extrude(height=3)
+            polygon([[0,0], [8,0], [0,8]]);
+}
+
 module outer_wall() {
     // Back post
     cube([rail_w, rail_w, outer_wall_h]);
@@ -86,6 +94,13 @@ module outer_wall() {
     // Top horizontal
     translate([0, 0, outer_wall_h - rail_w])
         cube([rail_w, pod_depth, rail_w]);
+    // Gussets — back and front corner posts only
+    // Back post: centered in Y on post (Y=1 to Y=4), starts at inner post face X=rail_w
+    translate([rail_w, 1, rail_w])
+        gusset();
+    // Front post: same but at front of pod
+    translate([rail_w, pod_depth - rail_w + 1, rail_w])
+        gusset();
 }
 
 module inner_wall() {

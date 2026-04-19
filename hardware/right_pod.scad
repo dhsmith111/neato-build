@@ -100,7 +100,7 @@ module outer_wall() {
     translate([rail_w, 1, rail_w])
         gusset();
     // Front post: mirror of back, gusset points toward -Y (into pod)
-    translate([rail_w, pod_depth, rail_w])
+    translate([rail_w, pod_depth - 1, rail_w])
         mirror([0, 1, 0]) gusset();
 }
 

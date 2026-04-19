@@ -86,18 +86,18 @@ module outer_wall() {
     // Top horizontal
     translate([0, 0, outer_wall_h - rail_w])
         cube([rail_w, pod_depth, rail_w]);
-    // Gussets at inside base of each outer post — bracing toward pod interior
-    // Back post: gusset points toward +Y (into pod)
-    translate([0, rail_w, rail_w])
-        gusset();
-    // Front post: gusset points toward -Y (into pod) — mirror
-    translate([0, pod_depth - rail_w, rail_w])
-        mirror([0, 1, 0]) gusset();
-    // Center post: gussets on both sides
-    translate([0, pod_depth/2 - rail_w/2, rail_w])
-        mirror([0, 1, 0]) gusset();
-    translate([0, pod_depth/2 + rail_w/2, rail_w])
-        gusset();
+    // Gussets — at base of each post, extending into pod along X, 3mm thick along Y
+    // Back post
+    translate([rail_w, rail_w, rail_w])
+        gusset_y();
+    // Front post
+    translate([rail_w, pod_depth - rail_w, rail_w])
+        gusset_y();
+    // Center post — one gusset each side
+    translate([rail_w, pod_depth/2 - rail_w/2, rail_w])
+        gusset_y();
+    translate([rail_w, pod_depth/2 + rail_w/2, rail_w])
+        gusset_y();
 }
 
 module inner_wall() {
@@ -119,12 +119,17 @@ module inner_wall() {
         cube([rail_w, pod_depth, rail_w]);
 }
 
-// Triangular gusset — 8mm along Y, 8mm up Z, 3mm thick along X
-// Sits in inside corner of post: flat against post inner face and base
+// Triangular gusset — 3mm thick (Y), extends 8mm along X, 8mm tall (Z)
+// Place at base of post with post at X=0, gusset extends into pod
 module gusset() {
-    rotate([90, 0, 90])
-        linear_extrude(height=3)
-            polygon([[0,0], [8,0], [0,8]]);
+    linear_extrude(height=3, center=false)
+        rotate([0, 0, 0])
+        polygon([[0,0], [8,0], [0,8]]);
+}
+// Wrapper: extrudes in Y direction (3mm thick along Y)
+module gusset_y() {
+    rotate([90, 0, 0])
+        gusset();
 }
 
 module standoff(h, hole_d) {

@@ -68,7 +68,8 @@ module gusset() {
                 polygon([[0,0], [8,0], [0,8]]);
 }
 
-module side_wall(x_pos) {
+// x_dir: 1 for left wall (gussets extend +X), -1 for right wall (gussets extend -X)
+module side_wall(x_pos, x_dir) {
     translate([x_pos, 0, 0]) {
         cube([rail_w, rail_w, wall_h]);
         translate([0, pod_depth - rail_w, 0])
@@ -77,13 +78,16 @@ module side_wall(x_pos) {
             cube([rail_w, rail_w, wall_h]);
         translate([0, 0, wall_h - rail_w])
             cube([rail_w, pod_depth, rail_w]);
-        // Gussets at back, front and center posts
-        translate([rail_w, 0, rail_w])
-            gusset();
-        translate([rail_w, pod_depth, rail_w])
-            mirror([0, 1, 0]) gusset();
-        translate([rail_w, pod_depth/2 - rail_w/2, rail_w])
-            gusset();
+        // Gussets — direction depends on which wall
+        if (x_dir > 0) {
+            translate([rail_w, 0, rail_w])             gusset();
+            translate([rail_w, pod_depth, rail_w])     mirror([0,1,0]) gusset();
+            translate([rail_w, pod_depth/2 - rail_w/2, rail_w]) gusset();
+        } else {
+            translate([0, 0, rail_w])                  mirror([1,0,0]) gusset();
+            translate([0, pod_depth, rail_w])          mirror([1,0,0]) mirror([0,1,0]) gusset();
+            translate([0, pod_depth/2 - rail_w/2, rail_w]) mirror([1,0,0]) gusset();
+        }
     }
 }
 
@@ -100,8 +104,8 @@ module standoff(h, hole_d) {
 
 union() {
     ribbed_bottom();
-    side_wall(0);
-    side_wall(pod_width - rail_w);
+    side_wall(0, 1);
+    side_wall(pod_width - rail_w, -1);
 
     for (h = relay_holes) {
         translate([h[0], h[1], rail_w])

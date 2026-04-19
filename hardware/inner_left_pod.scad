@@ -61,6 +61,13 @@ module ribbed_bottom() {
     }
 }
 
+module gusset() {
+    rotate([90, 0, 0])
+        translate([0, 0, -5])
+            linear_extrude(height=5)
+                polygon([[0,0], [8,0], [0,8]]);
+}
+
 module side_wall(x_pos) {
     translate([x_pos, 0, 0]) {
         cube([rail_w, rail_w, wall_h]);
@@ -70,6 +77,13 @@ module side_wall(x_pos) {
             cube([rail_w, rail_w, wall_h]);
         translate([0, 0, wall_h - rail_w])
             cube([rail_w, pod_depth, rail_w]);
+        // Gussets at back, front and center posts
+        translate([rail_w, 0, rail_w])
+            gusset();
+        translate([rail_w, pod_depth, rail_w])
+            mirror([0, 1, 0]) gusset();
+        translate([rail_w, pod_depth/2 - rail_w/2, rail_w])
+            gusset();
     }
 }
 

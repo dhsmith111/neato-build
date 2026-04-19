@@ -50,6 +50,13 @@ yahboom_holes = [
 // MODULES
 // ============================================================
 
+module gusset() {
+    rotate([90, 0, 0])
+        translate([0, 0, -5])
+            linear_extrude(height=5)
+                polygon([[0,0], [8,0], [0,8]]);
+}
+
 module ribbed_bottom() {
     cube([rail_w, pod_depth, rail_w]);
     translate([pod_width - rail_w, 0, 0])
@@ -71,6 +78,11 @@ module outer_wall() {
         cube([rail_w, pod_depth, rail_w]);
     translate([0, 0, outer_wall_h - rail_w])
         cube([rail_w, pod_depth, rail_w]);
+    // Gussets — back, front, no center post on this wall
+    translate([rail_w, 0, rail_w])
+        gusset();
+    translate([rail_w, pod_depth, rail_w])
+        mirror([0, 1, 0]) gusset();
 }
 
 module inner_wall() {
@@ -80,6 +92,11 @@ module inner_wall() {
             cube([rail_w, rail_w, inner_wall_h]);
         translate([0, 0, inner_wall_h - rail_w])
             cube([rail_w, pod_depth, rail_w]);
+        // Gussets — back and front, extending toward outer wall (-X)
+        translate([rail_w, 0, rail_w])
+            mirror([1, 0, 0]) gusset();
+        translate([rail_w, pod_depth, rail_w])
+            mirror([1, 0, 0]) mirror([0, 1, 0]) gusset();
     }
 }
 

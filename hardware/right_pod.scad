@@ -95,12 +95,12 @@ module outer_wall() {
     translate([0, 0, outer_wall_h - rail_w])
         cube([rail_w, pod_depth, rail_w]);
     // Gussets — back and front corner posts only
-    // Back post: centered in Y on post (Y=1 to Y=4), starts at inner post face X=rail_w
+    // Back post: Y=1 to Y=4 (centered on 5mm post), extends into pod in X
     translate([rail_w, 1, rail_w])
         gusset();
-    // Front post: same but at front of pod
-    translate([rail_w, pod_depth - rail_w + 1, rail_w])
-        gusset();
+    // Front post: mirror of back, gusset points toward -Y (into pod)
+    translate([rail_w, pod_depth - rail_w - 1, rail_w])
+        mirror([0, 1, 0]) gusset();
 }
 
 module inner_wall() {

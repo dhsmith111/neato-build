@@ -86,18 +86,6 @@ module outer_wall() {
     // Top horizontal
     translate([0, 0, outer_wall_h - rail_w])
         cube([rail_w, pod_depth, rail_w]);
-    // Gussets — triangle in XZ plane, 3mm thick in Y, placed at post inner face
-    // Back post: centered on post in Y, gusset extends into pod in X
-    translate([rail_w, rail_w/2, rail_w])
-        gusset();
-    // Front post
-    translate([rail_w, pod_depth - rail_w - 3, rail_w])
-        gusset();
-    // Center post — one gusset each side
-    translate([rail_w, pod_depth/2 - rail_w/2 - 3, rail_w])
-        gusset();
-    translate([rail_w, pod_depth/2 + rail_w/2, rail_w])
-        gusset();
 }
 
 module inner_wall() {
@@ -117,14 +105,6 @@ module inner_wall() {
     // Mid/top horizontal beam (single beam at top of inner wall)
     translate([pod_width - rail_w, 0, inner_wall_h - rail_w])
         cube([rail_w, pod_depth, rail_w]);
-}
-
-// Triangular gusset — triangle in XZ plane, extruded 3mm along Y
-// X goes into pod, Z goes up post, 3mm thick in Y
-module gusset() {
-    rotate([90, 0, 0])
-        linear_extrude(height=3)
-            polygon([[0,0], [8,0], [0,8]]);
 }
 
 module standoff(h, hole_d) {

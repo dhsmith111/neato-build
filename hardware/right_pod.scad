@@ -101,6 +101,9 @@ module outer_wall() {
         gusset();
     translate([rail_w, pod_depth, rail_w])
         mirror([0, 1, 0]) gusset();
+    // Center post
+    translate([rail_w, pod_depth/2 - rail_w/2, rail_w])
+        gusset();
 }
 
 module inner_wall() {

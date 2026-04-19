@@ -74,9 +74,10 @@ module ribbed_bottom() {
 // Gusset: triangle in XZ plane, 3mm thick in Y
 // X=0 at post inner face, Z=0 at base top, extends +X into pod and +Z up post
 module gusset() {
-    rotate([-90, 0, 0])
-        linear_extrude(height=3)
-            polygon([[0,0], [8,0], [0,8]]);
+    rotate([90, 0, 0])
+        mirror([0, 1, 0])
+            linear_extrude(height=3)
+                polygon([[0,0], [8,0], [0,8]]);
 }
 
 module outer_wall() {

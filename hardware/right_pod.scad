@@ -107,6 +107,11 @@ module outer_wall() {
 module inner_wall() {
     // Back corner post (NIC side)
     cube([rail_w, rail_w, inner_wall_h]);
+    // Gussets — back and front corner posts, extending toward outer wall (-X)
+    translate([pod_width - rail_w, 1, rail_w])
+        mirror([1, 0, 0]) gusset();
+    translate([pod_width - rail_w, pod_depth - 1, rail_w])
+        mirror([1, 0, 0]) mirror([0, 1, 0]) gusset();
     // Front corner post (USB side)
     translate([pod_width - rail_w, pod_depth - rail_w, 0])
         cube([rail_w, rail_w, inner_wall_h]);

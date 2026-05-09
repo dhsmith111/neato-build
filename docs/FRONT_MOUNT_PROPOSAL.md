@@ -108,12 +108,12 @@ Velcro placement constraints (vertical band on the bumper face only):
 ### Other new constraints
 
 - **Bump-switch activation force vs. added mass.** Bumper switches activate
-  at ~170gf each. With ~250-350g of electronics velcro'd to the bumper
-  face, the bumper is now a "bumper plus payload" — the switches still need
-  to trigger cleanly on contact, and the bumper return spring needs to pop
-  the bumper back out fully against the added inertia. **This is the
-  critical feasibility question for the velcro-on-bumper approach** and
-  needs physical testing once a prototype exists.
+  at ~170gf each. Total front-mount payload is ~250g electronics + wiring +
+  TBD PLA shells. The bumper is now a "bumper plus payload" — the switches
+  still need to trigger cleanly on contact, and the bumper return spring
+  needs to pop the bumper back out fully against the added inertia. **This
+  is the critical feasibility question for the velcro-on-bumper approach**
+  and needs physical testing once a prototype exists.
 - **Cliff sensor downward FOV.** Cliff sensors live on the chassis front
   edge (not on the bumper) and look down. Structure must stay clear of
   their downward cone. Front-mounted mass must not sag the chassis enough
@@ -121,13 +121,41 @@ Velcro placement constraints (vertical band on the bumper face only):
 - **Lidar forward FOV.** Lidar dome sits ~30-35mm above the main top
   surface, centered left-right and offset toward the rear ~3rd of the
   chassis. Front structure must stay below the dome's lower edge.
-- **Weight distribution / CG.** Cantilevering ~250-350g forward of the
-  drive wheels (Pi+HAT ~100g, Yahboom ~40g, relay ~20g, camera ~10-20g,
-  PLA shells ~80-150g) shifts CG forward. Mitigated somewhat by the fact
-  that **the battery sits in the rear** (two packs in the rear quarters,
-  ~320g each), so stock CG is rear-biased and there's some headroom.
-  Still: risk of nose-dive on stops, wheel slip on thresholds, cliff sensor
-  false triggers if front sags.
+- **Weight distribution / CG.** Cantilevering electronics + shells forward
+  of the drive wheels shifts CG forward. Component weights (researched
+  2026-05-09, no plastic chassis on Pi+HAT, heatsink only — no active
+  cooler):
+
+  | Item | Weight (g) | Confidence |
+  |------|-----------:|------------|
+  | Pi 5 (8GB), bare board | 46 | High (RPi spec) |
+  | AI HAT+ 2 board (Hailo-10H, 8GB) | 50 | Medium (Waveshare listing) |
+  | AI HAT+ 2 heatsink | ~15 | Low (inferred from dimensions) |
+  | Pi Camera Module 3 Wide | ~4 | Low (published 14-15g is shipping wt) |
+  | Pi Camera 500mm cable | ~5 | Medium |
+  | Yahboom PD board | ~60 | Medium (inferred from 52Pi sibling product) |
+  | SunFounder 2ch relay | 31 | High (SunFounder spec) |
+  | M2.5 standoffs + screws (×4 each pod, 2 pods) | ~6 each | Low |
+  | M3 standoffs + screws (×4) | ~8 | Medium |
+  | **Electronics + standoffs subtotal** | **~225** | |
+  | Wires, heat shrink, jumpers, zip ties | ~25-30 | Low (envelope) |
+  | PLA pod shells | **TBD — weigh printed pods** | unknown |
+
+  Mitigated somewhat by the fact that **the battery sits in the rear**
+  (two packs in the rear quarters, ~320g each), so stock CG is rear-biased
+  and there's some headroom. Still: risk of nose-dive on stops, wheel slip
+  on thresholds, cliff sensor false triggers if front sags.
+
+  **Open data point: weigh the existing printed rear pods.** Three populated
+  pods exist (per [MOUNTING.md](MOUNTING.md)). Weighing each — empty shell
+  alone, then with boards mounted on standoffs — gives:
+  - Real PLA mass per shell (the only unknown in the table above).
+  - Real per-pod populated weight, useful for CG modeling and for
+    estimating the total front-mount payload.
+
+  Front-mount shells will be a different shape than rear shells (flat back
+  instead of curved, no center-vent split), but as a starting point the
+  rear-shell mass is the best data we have.
 - **Under-furniture clearance.** Front structure adds to overall length and
   potentially height. Must not exceed the bare robot's clearance envelope.
 
@@ -194,9 +222,9 @@ have to model the bumper area from caliper measurements ourselves.
 - **RobotShop teardown video**: https://www.youtube.com/watch?v=G8G72NAppKY
 - **Neato Programmer's Manual**: https://help.neatorobotics.com/wp-content/uploads/2020/07/XV-ProgrammersManual-3_1.pdf
 
-## Measurements still needed (caliper on actual robot)
+## Measurements still needed
 
-These drive the front-mount geometry and are not reliably available online:
+### Caliper on actual robot (Pi-side / physical-access task)
 
 1. Bumper face exact width and height (the molded shell only).
 2. Bumper free-state stand-off from chassis face.
@@ -205,8 +233,13 @@ These drive the front-mount geometry and are not reliably available online:
 5. Front IR rangefinder window positions on the bumper face (Sharp 0A51SK x4).
 6. Front magnetic strip sensor positions.
 7. Drive-wheel axis distance from the flat front edge.
-8. Any mounting boss / threaded inserts on the upper shell near the front
-   (preferred over gluing/strapping to the bumper, since the bumper moves).
+
+### Weigh on a kitchen scale (print-PC-side task — printed pods are there)
+
+8. Empty shell weight, each rear pod (right, inner left, outer left).
+9. Populated weight, each rear pod (with its board + standoffs + screws).
+10. Subtract (9) - (8) = real electronics+standoffs weight per pod, to
+    sanity-check the table above.
 
 ### Layout: separate pod chassis along the front bumper
 

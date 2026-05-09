@@ -309,18 +309,24 @@ directly informative.
 |---|------|-------|-------|
 | A1 | Bumper face width | ~330mm (estimated) | No caliper long enough; visual confirmation against estimate |
 | A2 | Bumper face height | **61mm** (measured) | Pod outer shell may extend above/below this |
-| A3 | Bumper-side pinch zone inset | unknown — using estimate ~20mm | Sides are smooth; no visible seam to measure from |
+| A3 | Bumper-side pinch zone inset | unknown — using estimate ~20mm each side | Sides are smooth; no visible seam to measure from |
 
-### B. Bumper kinematics — pending
+**Usable bumper width for pods** = 330 − 20 − 20 = **~290mm**.
+No wall-sensor exclusion needed because no pod will extend to the corner
+(C1 not measured since no pod reaches the side).
 
-- B1. Bumper free-state stand-off from chassis face.
-- B2. Bumper travel distance before switches click.
+### B. Bumper kinematics — skipped as overkill
 
-### C. Sensor positions — pending
+- B1, B2. Not measured. Bumper travel safety is absorbed by the D1/D2
+  ~5mm overhang allowances; B1 (free-state stand-off) only matters if
+  pods were attaching to chassis instead of bumper.
 
-- C1. Right-front-corner side window for `WallSensorInMM`.
-- C2. Cliff sensor positions (left and right) on chassis underside.
-- C3. Magnetic strip sensor positions.
+### C. Sensor positions — skipped as overkill
+
+- C1, C2, C3. Not measured. C1 (side wall sensor at right-front corner)
+  is moot because no pod will extend to the corner. C2/C3 (cliff and
+  magnetic strip sensors) are on the chassis underside; pods on the
+  bumper face don't intersect their downward fields of view.
 
 ### D. Pod vertical envelope above and below bumper face
 
@@ -333,9 +339,11 @@ directly informative.
 total pod height** available on the bumper face. Any taller and the pod
 hits something during normal operation.
 
-### E. Drive geometry — pending
+### E. Drive geometry — skipped as overkill
 
-- E1. Drive-wheel axis distance from the flat front edge.
+- E1. Not measured. Useful for CG / moment-arm analysis later, but not
+  needed to design pod shapes. Will revisit if drive behavior testing
+  shows nose-dive or wheel-slip problems.
 
 ### Layout: separate pod chassis along the front bumper
 

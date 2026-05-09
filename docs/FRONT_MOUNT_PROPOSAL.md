@@ -322,12 +322,16 @@ directly informative.
 - C2. Cliff sensor positions (left and right) on chassis underside.
 - C3. Magnetic strip sensor positions.
 
-### D. Vertical clearances above and below bumper face
+### D. Pod vertical envelope above and below bumper face
 
 | # | Item | Value | Notes |
 |---|------|-------|-------|
-| D1 | Floor clearance below bumper face | ~5mm at rest, with ~5mm additional margin during depression (assumed) | Not directly measured — assumption pending physical check. Pod bottom overhang must respect both numbers. |
-| D2 | Upper-chassis clearance above bumper face | pending | At rest and at full depression. |
+| D1 | Pod overhang allowance below bumper face | ~5mm | Pod outer shell can extend ~5mm below the bottom edge of the bumper face without hitting floor or chassis features during normal operation including bump events |
+| D2 | Pod overhang allowance above bumper face | ~5mm | Pod outer shell can extend ~5mm above the top edge of the bumper face without hitting upper chassis during bump events |
+
+**Total pod vertical envelope:** 61mm (A2) + 5mm above + 5mm below = **~71mm
+total pod height** available on the bumper face. Any taller and the pod
+hits something during normal operation.
 
 ### E. Drive geometry — pending
 

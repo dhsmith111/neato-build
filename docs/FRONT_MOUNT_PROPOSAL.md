@@ -102,8 +102,52 @@ Velcro placement constraints (vertical band on the bumper face only):
   the shell; pulling on the velcro there could cause the "stuck bumper"
   failure mode.
 - **Avoid the IR rangefinder windows** — 4 Sharp 0A51SK sensors look forward
-  through the bumper face. Velcro patches and the chassis itself must not
-  cover them or block their forward line-of-sight.
+  through the bumper face. Velcro patches must not cover them, and the
+  chassis itself must not block their forward line-of-sight.
+
+**Pod orientation: same topology as rear pods, rotated 90°.** Each pod's
+"bottom" face (the ribbed velcro surface, in rear-pod terms) presses
+against the bumper. Each pod's "top" face (open in rear-pod design)
+points **forward**, away from the robot. Standoffs stick **forward** from
+the bumper, parallel to the floor. Boards mount on the standoffs with
+component sides facing forward — meaning the forward-facing camera board's
+lens naturally points forward without any bracket re-orientation.
+
+Mapping rear-pod terminology to front-pod orientation:
+
+| Rear pod term | Front pod equivalent |
+|---|---|
+| Pod "bottom" (ribbed, velcro to chassis rear) | Pod's bumper-facing face (ribbed, velcro to bumper face) |
+| Pod "top" (open) | Pod's forward face (open) |
+| Pod "depth" (extends rearward from chassis) | Pod's "forward extension" (sticks out from the bumper) |
+| Pod "width" (across rear chassis L-R) | Pod's horizontal span on the bumper face |
+| Pod "height" (vertical, up the rear chassis) | Pod's vertical extent on the bumper face |
+| Standoffs rise rearward from the chassis | Standoffs project forward from the bumper |
+| Board's long axis runs L-R across chassis | Board's long axis runs horizontally across bumper face |
+
+**Pods may be taller than the bumper face.** Velcro contact lives within
+the bumper-face vertical band, but the pod shell itself can extend above
+and below that band — same approach as the rear pods (pod height > velcro
+patch height). This lets us size pods around the electronics (Pi+HAT stack
+needs ~25mm of internal height alone) rather than cramming everything into
+the ~50-60mm bumper face.
+
+**Standoff loading is worse than rear-pod orientation.** In rear pods,
+standoffs carry board weight in compression (gravity pulls board onto
+standoffs). In front pods, standoffs carry board weight in cantilever
+shear (gravity pulls board perpendicular to the standoff axis). At Pi+HAT
+~100g on 18mm M2.5 brass standoffs the load is fine for steady state, but
+bump events add inertial load. Worth confirming during prototype testing;
+unlikely to require redesign.
+
+Two new constraints from pod overhang above/below the bumper:
+- **Bottom overhang must clear the floor under the bumper.** Pods ride with
+  the bumper; when the bumper depresses, the bottom of the pod also drops.
+  Pod bottom must stay above the floor (and above the chassis cliff-sensor
+  view) through full bumper travel.
+- **Top overhang must clear the upper chassis above the bumper.** Likewise,
+  pod top must not hit the upper case during bumper compression, or it
+  binds the bumper before the switches trigger.
 
 ### Other new constraints
 
@@ -233,6 +277,12 @@ have to model the bumper area from caliper measurements ourselves.
 5. Front IR rangefinder window positions on the bumper face (Sharp 0A51SK x4).
 6. Front magnetic strip sensor positions.
 7. Drive-wheel axis distance from the flat front edge.
+8. **Floor clearance directly below the bumper face**, both at rest and at
+   full bumper depression. (Drives how far a pod can hang below the bumper
+   face without scraping or being shoved up into the bumper on bump events.)
+9. **Vertical clearance above the bumper face up to the upper chassis**,
+   both at rest and during bumper depression. (Drives how far a pod can
+   extend above the bumper face without binding on the upper case.)
 
 ### Weigh on a kitchen scale (print-PC-side task — printed pods are there)
 

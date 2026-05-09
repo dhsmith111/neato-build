@@ -1,0 +1,119 @@
+# Pod Design — 3D Printed Electronics Mounts
+
+## Status
+SCAD files live in `cad/` folder of this repo. The pods documented here
+were designed for **rear-mount** and have been printed. They are now in
+service as part of the **front-mount prototype** (see
+[FRONT_MOUNT_PROPOSAL.md](FRONT_MOUNT_PROPOSAL.md) and [MOUNTING.md](MOUNTING.md)):
+the Yahboom (`outer_left_pod.scad`) and relay (`inner_left_pod.scad`)
+prints are velcro'd to the bumper face. The Pi+HAT pod (`right_pod.scad`)
+is **not in service** — Pi+HAT lives in its OEM Turbine Case for the
+front-mount approach.
+
+The original rear-mount install was never executed.
+
+## Three Pod Files
+
+**Dimension key:**
+- `pod_width` = across chassis (left-right when mounted) — must fit board width + 2x rail
+- `pod_depth` = outward from chassis — must fit board depth + 2x rail
+- `pod_height` = up the chassis surface — all pods 66mm
+- Rail width: 5mm standard, 10mm on outer left exposed edge
+- Board must fit inside rails with ~3mm clearance each side
+
+| File | Component | Board (W×D) | pod_width | pod_depth | Inner space (W×D) |
+|------|-----------|-------------|-----------|-----------|-------------------|
+| `right_pod.scad` | Pi 5 + AI HAT+ 2 | 85×58mm | 101mm | 70mm | 91×60mm |
+| `inner_left_pod.scad` | Relay module | 63×41mm | 75mm | 55mm | 65×45mm |
+| `outer_left_pod.scad` | Yahboom PD board | 65×56mm | 86mm | 68mm | 71×58mm |
+
+Note: outer_left inner width = pod_width - outer_rail_w(10) - rail_w(5) = 71mm
+
+## Design Principles
+
+**Orientation:** Bottom face velcros to robot chassis. Print this face flat on the bed.
+No supports needed.
+
+**Structure:** Open scaffold — not a box. Each pod has:
+- Ribbed bottom face (3 ribs, 12mm wide, aligned to standoff Y positions)
+- 4 corner posts + 1 center post per side (6 vertical posts per side wall)
+- Mid horizontal rail + top horizontal rail on each side
+- Top, front, back: fully open
+
+**Standoffs:** Rise from the ribbed bottom face upward. Board mounts on standoffs
+with screws through component mounting holes.
+- Height: 18mm
+- OD: 6mm
+- Ribs are positioned so each standoff lands fully centered on a rib (3mm clearance each side)
+
+## Per-Pod Details
+
+### Right Pod — Pi 5 + AI HAT+ 2
+- Hole pattern: 58x49mm, M2.5 (standoff_hole = 2.7mm)
+- Pi 5 board: 85x58mm
+- **Orientation:** long axis (85mm) runs along X (across chassis width)
+  - USB/ethernet ports on SHORT edge, facing inward = high X (inner/vent side of pod)
+  - Non-USB short edge faces outer (left) rail = low X
+- **Pi holes are NOT centered on the 85mm axis**
+  - Physically measured: holes offset toward non-USB edge
+  - `pi_x_left = 6mm` (rail_w + 1mm clearance from outer rail)
+  - `pi_x_right = 64mm` (32mm clearance to inner/USB rail)
+- **Y axis:** holes centered on pod depth
+  - `pi_y_front = 10.5mm`, `pi_y_rear = 59.5mm`
+- NIC side = low Y (near Y=0), USB2 side = high Y (near pod_depth)
+
+**Outer (left) side:** full corner posts + center post + mid + top horizontals
+
+**Inner (right/vent) side — port-aware structure:**
+- 2 full-height corner posts (back/NIC and front/USB2)
+- 2 thin (3mm) posts reaching from floor to mid horizontal beam:
+  - NIC/USB3 boundary: 19mm from NIC board edge → ~25mm pod Y
+  - USB3/USB2 boundary: 39mm from NIC board edge → ~45mm pod Y
+  - 20mm spread between posts — USB3 pair fits cleanly between them
+- Mid horizontal beam at pod_height/2 (~33mm) supported by all 4 posts
+- Single center post above mid beam (between the two thin post Y positions)
+- Top horizontal beam at pod_height - rail_w (61mm)
+- Port zone (23-38mm Z) left fully open between corner posts
+
+### Inner Left Pod — Relay Module
+- Hole pattern: 52.2x36.6mm, M3 (standoff_hole = 3.2mm)
+- Width: 70mm (relay is smaller than Pi/Yahboom)
+- Adjacent to center vent — inner/protected position
+- Both side walls: symmetric
+
+### Outer Left Pod — Yahboom PD Board
+- Hole pattern: 58x49mm, M2.5 (standoff_hole = 2.7mm)
+- Outer (left) rail: 10mm wide (reinforced — exposed edge of robot)
+- Inner (right) rail: 5mm standard
+- Battery cable notch: 25x20mm cutout on inner edge of base ribs, for 18AWG wires
+
+## Key Design Decisions (rationale)
+
+- **Three separate pods** (not one unit): smaller prints, independent removal,
+  easier iteration if one needs changes
+- **Ribbed bottom, not solid**: reduces warping on FDM flat surfaces; enough
+  velcro contact area; some flex to conform to curved chassis
+- **Center support post on side rails**: 63mm depth is borderline for PLA bridging;
+  center post eliminates sag on mid and top horizontal rails
+- **Ribs follow standoffs**: standoff positions are fixed by component hole patterns;
+  ribs are placed to match, not the other way around
+- **Yahboom outer-left**: KF301 screw terminals accessible from exposed outer edge;
+  battery cables from right side of chassis reach naturally
+- **Relay inner-left**: USB serial cable from chassis center-left is a short run
+
+## SCAD File History (ender3-setup repo, for reference)
+
+Files originated in `ender3-setup` repo and were moved here. Key commits there:
+- `0d98ef3` — initial baseline
+- `92bfee9` — rib_w widened to 12mm, standoff/rib alignment correct
+- `f98b06a` — revert of bad USB gap change (second chat made incorrect edit)
+- `b61f88a` — center support posts added to left pod side rails
+
+## Printing Plan
+
+1. Open each `.scad` in OpenSCAD, F6 to render, File → Export → STL
+2. Slice in Cura (PLA, no supports, ribbed face on bed)
+3. Print `right_pod.scad` first — simplest, good fit test
+4. Place Pi 5 on standoffs to verify hole alignment before printing left pods
+5. Velcro test fit on chassis rear
+6. Print remaining two pods

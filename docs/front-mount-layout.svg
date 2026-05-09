@@ -1,0 +1,286 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1180" width="900" height="1180">
+  <rect width="900" height="1180" fill="#ffffff"/>
+  <style>
+    text { font-family: monospace; font-size: 11px; fill: #333; }
+    .label { font-size: 13px; font-weight: bold; }
+    .title { font-size: 16px; font-weight: bold; }
+    .sub   { font-size: 11px; fill: #555; font-style: italic; }
+    .dim   { font-size: 10px; fill: #555; }
+    .pod-name-out { font-size: 10px; font-weight: bold; fill: #222; }
+  </style>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <!-- ========== TITLE ========== -->
+  <text x="450" y="32" text-anchor="middle" class="title">Neato XV — Front-Mount Layout</text>
+  <text x="450" y="52" text-anchor="middle" class="sub">estimates only — sensor positions illustrative until calipered</text>
+
+  <!-- ============================================================
+       TOP VIEW
+       Vertical layout (top to bottom):
+         85   FRONT-arrow row
+        105   Battery cable label band (single row)
+        130   Pod name labels row (single row)
+        150-205  Pods (height 55) — camera pod sits left, electronics row to its right
+        220   Cable labels row (USB-C PD / USB / CSI etc.)
+        245   Bumper face (height 14)
+        270   IR/sensor labels row
+        290+  Chassis (D-shape)
+       ============================================================ -->
+  <text x="450" y="80" text-anchor="middle" class="label">Top View</text>
+  <line x1="450" y1="100" x2="450" y2="86" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="488" y="96" class="dim">FRONT (bumper)</text>
+
+  <!-- Battery cable label — pinned at top, well above pod names -->
+  <text x="450" y="118" text-anchor="middle" fill="#c62828" font-size="10">battery 14.4V cable: chassis R-rear → R-side → around front → outer-left Yahboom</text>
+
+  <!-- Pod-name labels (above pods) -->
+  <text x="245" y="148" text-anchor="middle" class="pod-name-out">OUTER LEFT POD</text>
+  <text x="395" y="148" text-anchor="middle" class="pod-name-out">CENTER POD</text>
+  <text x="540" y="148" text-anchor="middle" class="pod-name-out">INNER RIGHT POD</text>
+
+  <!-- ===== Pods row (y=152..210) ===== -->
+
+  <!-- CAMERA POD — sits above Pi pod (separately, on its own row above the row of three) -->
+  <rect x="370" y="80" width="55" height="32" rx="2" fill="#ff9800" stroke="#333" stroke-width="1.5"/>
+  <text x="397" y="95" text-anchor="middle" fill="white" font-size="10">Camera</text>
+  <text x="397" y="107" text-anchor="middle" fill="white" font-size="9">Mod 3W</text>
+  <text x="430" y="92" class="pod-name-out">CAMERA POD</text>
+  <text x="430" y="106" class="dim">(lens out of page; sits above Pi pod)</text>
+  <!-- camera CSI line down to Pi pod top -->
+  <line x1="397" y1="112" x2="397" y2="152" stroke="#ffb300" stroke-width="1.8"/>
+  <text x="404" y="135" fill="#a85000" font-size="10">CSI</text>
+
+  <!-- YAHBOOM POD (outer left) -->
+  <rect x="200" y="152" width="90" height="55" rx="2" fill="#e91e63" stroke="#333" stroke-width="1.5"/>
+  <text x="245" y="178" text-anchor="middle" fill="white" font-size="11">Yahboom</text>
+  <text x="245" y="194" text-anchor="middle" fill="white" font-size="10">PD board</text>
+  <!-- KF301 (battery in) tab on outer-left edge -->
+  <rect x="195" y="172" width="5" height="14" fill="#ff8f00"/>
+  <!-- USB-C output on inner-right edge -->
+  <rect x="290" y="176" width="5" height="7" fill="#1565c0"/>
+
+  <!-- PI + HAT POD (center) -->
+  <rect x="320" y="152" width="150" height="55" rx="2" fill="#4caf50" stroke="#333" stroke-width="1.5"/>
+  <text x="395" y="178" text-anchor="middle" fill="white" font-size="11">Pi 5</text>
+  <text x="395" y="194" text-anchor="middle" fill="white" font-size="10">+ AI HAT+ 2</text>
+  <!-- USB-C in (left short edge) -->
+  <rect x="315" y="176" width="5" height="7" fill="#1565c0"/>
+  <!-- USB-A x2 + Eth (right short edge) -->
+  <rect x="470" y="166" width="5" height="6" fill="#444"/>
+  <rect x="470" y="178" width="5" height="6" fill="#444"/>
+  <rect x="470" y="190" width="5" height="6" fill="#2e7d32"/>
+
+  <!-- RELAY POD (inner right) -->
+  <rect x="490" y="152" width="100" height="55" rx="2" fill="#9c27b0" stroke="#333" stroke-width="1.5"/>
+  <text x="540" y="178" text-anchor="middle" fill="white" font-size="11">2-ch Relay</text>
+  <text x="540" y="194" text-anchor="middle" fill="white" font-size="10">module</text>
+  <!-- Control header (left, faces Pi) -->
+  <rect x="485" y="174" width="5" height="10" fill="#666"/>
+  <!-- Switched USB tabs (right edge — but stays well left of bumper corner) -->
+  <rect x="590" y="174" width="5" height="6" fill="#ff8f00"/>
+  <rect x="590" y="184" width="5" height="6" fill="#ff8f00"/>
+
+  <!-- ===== Inter-pod cable labels (y ≈ 222) ===== -->
+  <text x="305" y="225" text-anchor="middle" fill="#1565c0" font-size="10">USB-C PD</text>
+  <text x="480" y="225" text-anchor="middle" fill="#a85000" font-size="10">USB / GPIO</text>
+
+  <!-- ===== Bumper face below pods ===== -->
+  <rect x="190" y="232" width="400" height="14" fill="#cccccc" stroke="#333" stroke-width="1"/>
+  <text x="390" y="242" text-anchor="middle" class="dim">front bumper face (~330mm wide, 61mm tall — out of page)</text>
+
+  <!-- Bumper side pinch zones -->
+  <rect x="190" y="232" width="22" height="14" fill="#f5b5b5"/>
+  <rect x="568" y="232" width="22" height="14" fill="#f5b5b5"/>
+  <text x="201" y="242" text-anchor="middle" font-size="8" fill="#a00000">no</text>
+  <text x="579" y="242" text-anchor="middle" font-size="8" fill="#a00000">no</text>
+
+  <!-- Right-front-corner side IR wall sensor (the ONE optic to preserve on this chassis) -->
+  <circle cx="595" cy="265" r="4" fill="#e53935" stroke="#700" stroke-width="0.8"/>
+  <line x1="600" y1="265" x2="635" y2="265" stroke="#e53935" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#arrow)"/>
+  <text x="640" y="269" fill="#a00000" font-size="10">IR wall sensor (side-facing)</text>
+
+  <!-- ===== Chassis (D-shape) — moved further down so labels above don't collide ===== -->
+  <path d="M 185 280 L 595 280 L 595 360 A 205 205 0 0 1 185 360 Z"
+        fill="#dddddd" stroke="#333" stroke-width="2"/>
+
+  <!-- Drive wheels -->
+  <rect x="190" y="430" width="22" height="42" rx="3" fill="#555" stroke="#333" stroke-width="1"/>
+  <rect x="568" y="430" width="22" height="42" rx="3" fill="#555" stroke="#333" stroke-width="1"/>
+  <text x="201" y="488" text-anchor="middle" class="dim">L wheel</text>
+  <text x="579" y="488" text-anchor="middle" class="dim">R wheel</text>
+
+  <!-- LiDAR cover -->
+  <circle cx="390" cy="430" r="46" fill="#bbbbbb" stroke="#555" stroke-width="1.5"/>
+  <text x="390" y="434" text-anchor="middle" fill="#333" font-size="11">LiDAR</text>
+  <!-- LiDAR forward arc (front half) -->
+  <path d="M 344 430 A 46 46 0 0 1 436 430"
+        fill="none" stroke="#00bcd4" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <text x="490" y="395" fill="#00bcd4" font-size="10">LiDAR forward arc — must clear above pods</text>
+
+  <!-- Battery bays (rear quarters) -->
+  <rect x="240" y="395" width="60" height="50" fill="#eef9ee" stroke="#5a8" stroke-dasharray="3,2"/>
+  <text x="270" y="425" text-anchor="middle" class="dim" fill="#3a6">L battery</text>
+  <rect x="480" y="395" width="60" height="50" fill="#eef9ee" stroke="#5a8" stroke-dasharray="3,2"/>
+  <text x="510" y="425" text-anchor="middle" class="dim" fill="#3a6">R battery</text>
+
+  <!-- "round edge = rear" caption — well below chassis, no overlap -->
+  <text x="390" y="555" text-anchor="middle" class="dim">round edge = rear</text>
+
+  <!-- ===== Cable runs (top view) ===== -->
+  <!-- Battery: chassis right rear → R-side → up across top → outer-left Yahboom -->
+  <path d="M 595 430 Q 660 250 660 130 Q 660 80 540 80 L 280 90 L 200 130 L 197 175"
+        fill="none" stroke="#c62828" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow)"/>
+
+  <!-- Yahboom USB-C → Pi USB-C (short hop) -->
+  <line x1="295" y1="180" x2="315" y2="180" stroke="#1565c0" stroke-width="1.8"/>
+
+  <!-- Pi USB-A → relay control -->
+  <line x1="475" y1="180" x2="485" y2="180" stroke="#a85000" stroke-width="1.8"/>
+
+  <!-- Relay switched USB → Neato internal USB port (assume left-rear of chassis) -->
+  <path d="M 595 180 Q 670 250 660 400 L 320 470"
+        fill="none" stroke="#ff8f00" stroke-width="1.8" stroke-dasharray="4,2" marker-end="url(#arrow)"/>
+  <text x="675" y="320" fill="#ff8f00" font-size="10">USB to Neato</text>
+
+  <!-- ============================================================
+       SIDE VIEW
+       ============================================================ -->
+  <text x="450" y="615" text-anchor="middle" class="label">Side View (facing right = front)</text>
+
+  <!-- Floor -->
+  <line x1="60" y1="830" x2="700" y2="830" stroke="#333" stroke-width="1"/>
+  <text x="708" y="833" class="dim">floor</text>
+
+  <!-- Drive wheel -->
+  <circle cx="290" cy="815" r="20" fill="#555" stroke="#333" stroke-width="1.5"/>
+
+  <!-- Neato body -->
+  <rect x="120" y="765" width="320" height="50" rx="6" fill="#dddddd" stroke="#333" stroke-width="2"/>
+  <text x="270" y="795" text-anchor="middle" class="dim">Neato body</text>
+
+  <!-- LiDAR cover on top -->
+  <rect x="170" y="740" width="100" height="25" rx="6" fill="#bbbbbb" stroke="#555" stroke-width="1.5"/>
+  <text x="220" y="756" text-anchor="middle" fill="#333" font-size="10">LiDAR dome</text>
+  <line x1="270" y1="750" x2="430" y2="750" stroke="#00bcd4" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="350" y="740" text-anchor="middle" fill="#00bcd4" font-size="10">LiDAR forward sweep</text>
+
+  <!-- Bumper face (vertical, at front of chassis) -->
+  <rect x="440" y="765" width="8" height="50" fill="#999" stroke="#333" stroke-width="1"/>
+
+  <!-- Cliff sensor (under front edge of chassis) -->
+  <circle cx="438" cy="815" r="3" fill="#fff" stroke="#0d47a1" stroke-width="1.2"/>
+
+  <!-- ===== POD on front of bumper (side view) ===== -->
+  <rect x="448" y="740" width="65" height="80" rx="2" fill="#4caf50" stroke="#333" stroke-width="1.5" opacity="0.92"/>
+  <text x="481" y="772" text-anchor="middle" fill="white" font-size="11">Pi 5 +</text>
+  <text x="481" y="788" text-anchor="middle" fill="white" font-size="11">HAT+ 2</text>
+  <text x="481" y="804" text-anchor="middle" fill="white" font-size="9">(pod, side view)</text>
+
+  <!-- Velcro band (where pod touches bumper face) -->
+  <rect x="448" y="770" width="4" height="40" fill="#ffeb3b" stroke="#a87800" stroke-width="0.7"/>
+
+  <!-- ===== Right-side annotations: each label gets its own y-row, big spacing ===== -->
+  <!-- Order top-to-bottom (y values 660, 690, 720, 750, 780, 810):
+       1. top overhang
+       2. velcro band
+       3. bumper face (no IR)
+       4. bottom overhang
+       5. cliff sensor
+       6. on-impact direction
+  -->
+
+  <!-- 1. top overhang -->
+  <line x1="513" y1="745" x2="640" y2="660" stroke="#0d47a1" stroke-width="0.8"/>
+  <text x="645" y="663" fill="#0d47a1" font-size="11">top overhang (~5mm above bumper face)</text>
+
+  <!-- 2. velcro band -->
+  <line x1="450" y1="790" x2="640" y2="690" stroke="#a87800" stroke-width="0.8"/>
+  <text x="645" y="693" fill="#a87800" font-size="11">velcro band on bumper face (61mm tall)</text>
+
+  <!-- 3. bumper face note -->
+  <line x1="444" y1="790" x2="640" y2="720" stroke="#666" stroke-width="0.8"/>
+  <text x="645" y="723" fill="#444" font-size="11">bumper face: solid plastic, no IR through it</text>
+
+  <!-- 4. bottom overhang -->
+  <line x1="513" y1="815" x2="640" y2="750" stroke="#0d47a1" stroke-width="0.8"/>
+  <text x="645" y="753" fill="#0d47a1" font-size="11">bottom overhang (~5mm below bumper face)</text>
+
+  <!-- 5. cliff sensor -->
+  <line x1="438" y1="818" x2="640" y2="780" stroke="#0d47a1" stroke-width="0.8"/>
+  <text x="645" y="783" fill="#0d47a1" font-size="11">cliff sensor (downward, under chassis edge)</text>
+
+  <!-- 6. on-impact direction (separate visual — arrow plus label, both clear of others) -->
+  <line x1="630" y1="810" x2="540" y2="810" stroke="#c62828" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="640" y="814" fill="#c62828" font-size="11">on impact: bumper + pod move backward together</text>
+
+  <!-- Forward extension dimension (under the pod) -->
+  <line x1="448" y1="845" x2="513" y2="845" stroke="#666" stroke-width="0.8"/>
+  <line x1="448" y1="841" x2="448" y2="849" stroke="#666" stroke-width="0.8"/>
+  <line x1="513" y1="841" x2="513" y2="849" stroke="#666" stroke-width="0.8"/>
+  <text x="481" y="860" text-anchor="middle" fill="#666" font-size="10">~30-40mm forward extension</text>
+
+  <!-- ============================================================
+       LEGEND (left column) — generous vertical spacing per row (24px)
+       ============================================================ -->
+  <text x="60" y="900" class="label">Legend</text>
+
+  <rect x="60"  y="912" width="18" height="14" fill="#e91e63"/>
+  <text x="86"  y="924" class="dim">Yahboom PD pod (outer left)</text>
+
+  <rect x="60"  y="936" width="18" height="14" fill="#4caf50"/>
+  <text x="86"  y="948" class="dim">Pi 5 + AI HAT+ 2 pod (center)</text>
+
+  <rect x="60"  y="960" width="18" height="14" fill="#9c27b0"/>
+  <text x="86"  y="972" class="dim">2-ch Relay pod (inner right)</text>
+
+  <rect x="60"  y="984" width="18" height="14" fill="#ff9800"/>
+  <text x="86"  y="996" class="dim">Camera pod (above Pi pod)</text>
+
+  <rect x="60"  y="1008" width="18" height="14" fill="#ffeb3b" stroke="#a87800"/>
+  <text x="86"  y="1020" class="dim">velcro band on pod's bumper-facing surface</text>
+
+  <circle cx="69" cy="1038" r="5" fill="#e53935" stroke="#700"/>
+  <text x="86"  y="1042" class="dim">IR wall sensor (side-facing, right-front corner)</text>
+
+  <circle cx="69" cy="1062" r="4" fill="#fff" stroke="#0d47a1" stroke-width="1.2"/>
+  <text x="86"  y="1066" class="dim">cliff sensor (downward, under chassis edge)</text>
+
+  <rect x="60"  y="1080" width="18" height="14" fill="#f5b5b5"/>
+  <text x="86"  y="1092" class="dim">bumper-side pinch zone — no velcro here</text>
+
+  <line x1="60" y1="1110" x2="78" y2="1110" stroke="#00bcd4" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="86"  y="1114" class="dim">LiDAR forward arc / sweep — must clear pod tops</text>
+
+  <line x1="60" y1="1134" x2="78" y2="1134" stroke="#c62828" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="86"  y="1138" class="dim">battery 14.4V cable</text>
+
+  <line x1="60" y1="1158" x2="78" y2="1158" stroke="#ff8f00" stroke-width="1.8" stroke-dasharray="4,2"/>
+  <text x="86"  y="1162" class="dim">USB serial (relay-switched, between Pi and Neato)</text>
+
+  <!-- ============================================================
+       NOTES (right column, well clear of legend horizontally)
+       ============================================================ -->
+  <text x="500" y="900" class="label">Notes</text>
+
+  <text x="500" y="924" class="dim">• Sensor positions are illustrative — to be revised after</text>
+  <text x="500" y="940" class="dim">  caliper measurements (most are now skipped as overkill).</text>
+
+  <text x="500" y="968" class="dim">• Pods extend ~30-40mm forward of bumper. Pods can</text>
+  <text x="500" y="984" class="dim">  also extend ~5mm above and ~5mm below the bumper-face</text>
+  <text x="500" y="1000" class="dim">  vertical band. Total pod vertical envelope ~71mm.</text>
+
+  <text x="500" y="1028" class="dim">• Bumper face has NO IR sensors looking through it —</text>
+  <text x="500" y="1044" class="dim">  solid plastic, mechanical bump switches only. The one</text>
+  <text x="500" y="1060" class="dim">  optic to preserve is the side-facing wall sensor at the</text>
+  <text x="500" y="1076" class="dim">  right-front corner — pods do not extend to the corner.</text>
+
+  <text x="500" y="1104" class="dim">• Usable bumper width = 330 - 20 - 20 = ~290mm.</text>
+  <text x="500" y="1120" class="dim">  Pi+HAT 110 + Yahboom 85 + Relay 80 = 275mm — fits</text>
+  <text x="500" y="1136" class="dim">  with ~15mm to share for inter-pod gaps. Camera pod</text>
+  <text x="500" y="1152" class="dim">  goes ABOVE Pi pod (vertical stack), not in line.</text>
+</svg>

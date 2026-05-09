@@ -480,7 +480,7 @@ Reviewed 2026-05-09 against `pod-design` branch (93 commits of iteration).
 - Yahboom battery-cable notch: 25×20mm cutout on inner edge of base ribs.
 - Port-aware inner wall design pattern (thin posts at port-gap positions,
   full corner posts at edges).
-- The proven gusset module — see `hardware/right_pod.scad` on `pod-design`.
+- The proven gusset module — see `cad/right_pod.scad`.
   Took ~20 commits to get the orientation right; copy the working version,
   do not re-derive.
 

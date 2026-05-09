@@ -15,12 +15,11 @@ for design rationale and the bumper-face envelope analysis.
 | SunFounder 2-ch relay | Inside the existing `inner_left_pod.scad` print (rear-mount design), velcro to bumper face |
 | Camera Module 3 Wide | TBD — small velcro mount or bracket above the Pi case |
 
-The two rear-mount pods are not optimal for front-mount (their outer shells
-are shaped to match the curved rear chassis, not a flat bumper face), but
-they exist, the boards are populated, and the prototype's job is to answer
-"does front-mounting work at all" before investing in front-specific pod
-geometry. Velcro contact area against the flat bumper may be partial because
-of the curved outer shells — this is a known risk for the prototype phase.
+The two rear-mount pods are flat-bottomed rectangular boxes (not curved —
+they were always designed to mount to flat surfaces). They aren't sized
+optimally for the front bumper face dimensions, but they sit flat against
+it. The prototype's job is to answer "does front-mounting work at all"
+before investing in front-specific pod geometry.
 
 ## Bumper-Face Layout
 
@@ -66,11 +65,9 @@ Verified on the physical robot (Board Rev 64, FW 3.4.24079) via
   with the dock and charges normally despite the front-mount payload.
   This was the single biggest functional risk for the rear-mount approach
   the front-mount was chosen to avoid — confirmed solved.
-- **Curved-shell pods sit tilted on the flat bumper face.** Yahboom and
-  relay pod prints (rear-mount design with curved outer shells) don't
-  sit flush against the bumper — they tilt with one edge against the
-  bumper and the other edge gapped. Velcro is holding via partial contact
-  on the closer edge. Functional for prototype but not ideal long-term.
+- **Pods sit flat against the bumper face** — outer shells are
+  rectangular boxes with flat ribbed bottoms; they mount cleanly with
+  full velcro contact area.
 - **Battery cabling routed over-the-top** (over the lidar cover) rather
   than around the right side of the chassis. Cleaner than the original
   side-routing plan.
@@ -84,8 +81,7 @@ Open prototype tests:
 - Whether the bumper still depresses and returns cleanly with payload.
 - Whether the robot drives, navigates, and avoids triggering cliff
   sensors with forward CG shift.
-- Whether velcro adhesion holds long-term given partial contact on the
-  curved-shell pods.
+- Whether velcro adhesion holds long-term under bump events.
 
 Once evaluated, decisions on whether to:
 - Print front-mount-specific pods (designs in [FRONT_MOUNT_PROPOSAL.md](FRONT_MOUNT_PROPOSAL.md)

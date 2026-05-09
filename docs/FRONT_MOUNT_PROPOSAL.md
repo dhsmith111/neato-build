@@ -456,11 +456,10 @@ clearance for any GPIO wiring shape.
   stay clear of the bumper sides, (c) provide enough surface area to
   hold the pod's mass through bump events. Driven by sensor window
   positions, which still need measuring.
-- **Pod outer shell shape.** Rear pods on `pod-design` are shaped to wrap
-  around the curved rear chassis. Front pods sit against a flat bumper
-  face — outer shell is simpler. The "pod-side velcro face" replaces
-  the "rear-chassis-side velcro face" of the rear pods, but it's the
-  same idea, just on a flat instead of curved surface.
+- **Pod outer shell shape.** Rear pods are flat-bottomed rectangular boxes;
+  they mount fine to the flat bumper face. Front-specific pods would
+  re-tune the dimensions for the bumper-face envelope (290mm wide, 71mm
+  vertical) but the shell topology is unchanged.
 
 ## What Carries Over from `pod-design`
 
@@ -519,16 +518,17 @@ Reviewed 2026-05-09 against `pod-design` branch (93 commits of iteration).
 
 ## What Changes from `pod-design`
 
-- **Outer shell shape.** Rear pods are shaped to match the curved rear
-  chassis with a center vent split. Front bumper is flat — outer shell
-  becomes simpler geometry.
-- **Mounting interface.** Velcro to a flat bumper-area face vs. velcro to
-  the curved rear.
-- **Pod arrangement.** No center-vent split on the front, so pods sit
-  linearly across the flat face. Order is a layout decision, not forced
+- **Pod arrangement.** Rear-mount plan put the pods across the rear
+  chassis with a center-vent split (Yahboom outer-left, Relay inner-left,
+  Pi right). Front-mount has no center split, so pods sit linearly
+  across the flat bumper face. Order is a layout decision, not forced
   by chassis geometry.
 - **Cable routing.** Battery cable run grows substantially (rear-right
-  origin → forward).
+  origin → forward). USB serial run grows similarly.
+- **Pod sizing for the bumper-face envelope.** Front-specific pods would
+  re-tune `pod_width` / `pod_depth` / `pod_height` for the 290mm × 71mm
+  envelope rather than the rear chassis dimensions, but topology and
+  shell shape (flat-bottomed rectangular box) are unchanged.
 - **New mount considerations:** bumper preservation, cliff sensor
   preservation, lidar FOV, forward-cantilever CG impact. None of these
   applied to rear-mount.

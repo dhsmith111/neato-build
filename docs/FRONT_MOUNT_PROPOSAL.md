@@ -221,23 +221,16 @@ Two new constraints from pod overhang above/below the bumper:
   | M3 standoffs + screws (×4) | ~8 | Medium |
   | **Electronics + standoffs subtotal** | **~225** | |
   | Wires, heat shrink, jumpers, zip ties | ~25-30 | Low (envelope) |
-  | PLA pod shells | **TBD — weigh printed pods** | unknown |
+  | PLA pod shells | TBD — weigh first printed front pods | unknown |
 
   Mitigated somewhat by the fact that **the battery sits in the rear**
   (two packs in the rear quarters, ~320g each), so stock CG is rear-biased
   and there's some headroom. Still: risk of nose-dive on stops, wheel slip
   on thresholds, cliff sensor false triggers if front sags.
 
-  **Open data point: weigh the existing printed rear pods.** Three populated
-  pods exist (per [MOUNTING.md](MOUNTING.md)). Weighing each — empty shell
-  alone, then with boards mounted on standoffs — gives:
-  - Real PLA mass per shell (the only unknown in the table above).
-  - Real per-pod populated weight, useful for CG modeling and for
-    estimating the total front-mount payload.
-
-  Front-mount shells will be a different shape than rear shells (flat back
-  instead of curved, no center-vent split), but as a starting point the
-  rear-shell mass is the best data we have.
+  Front-pod shell weight will be measured directly from the first printed
+  front pods. The rear pods are a different shell shape and not worth
+  weighing for this purpose.
 - **Under-furniture clearance.** Front structure adds to overall length and
   potentially height. Must not exceed the bare robot's clearance envelope.
 
@@ -304,31 +297,39 @@ have to model the bumper area from caliper measurements ourselves.
 - **RobotShop teardown video**: https://www.youtube.com/watch?v=G8G72NAppKY
 - **Neato Programmer's Manual**: https://help.neatorobotics.com/wp-content/uploads/2020/07/XV-ProgrammersManual-3_1.pdf
 
-## Measurements still needed
+## Measurements (caliper on actual robot, Pi-side)
 
-### Caliper on actual robot (Pi-side / physical-access task)
+PLA shell weights will be measured directly from the first printed front
+pods. Rear-pod weighing skipped — shells are different shape and not
+directly informative.
 
-1. Bumper face exact width and height (the molded shell only).
-2. Bumper free-state stand-off from chassis face.
-3. Bumper travel distance before switches click.
-4. Front cliff-sensor window positions on the chassis underside.
-5. **Right-front-corner side window** position for the IR wall sensor
-   (`WallSensorInMM`). The one optic to preserve on this chassis.
-6. Front magnetic strip sensor positions.
-7. Drive-wheel axis distance from the flat front edge.
-8. **Floor clearance directly below the bumper face**, both at rest and at
-   full bumper depression. (Drives how far a pod can hang below the bumper
-   face without scraping or being shoved up into the bumper on bump events.)
-9. **Vertical clearance above the bumper face up to the upper chassis**,
-   both at rest and during bumper depression. (Drives how far a pod can
-   extend above the bumper face without binding on the upper case.)
+### A. Bumper face geometry
 
-### Weigh on a kitchen scale (print-PC-side task — printed pods are there)
+| # | Item | Value | Notes |
+|---|------|-------|-------|
+| A1 | Bumper face width | ~330mm (estimated) | No caliper long enough; visual confirmation against estimate |
+| A2 | Bumper face height | **61mm** (measured) | Pod outer shell may extend above/below this |
+| A3 | Bumper-side pinch zone inset | unknown — using estimate ~20mm | Sides are smooth; no visible seam to measure from |
 
-8. Empty shell weight, each rear pod (right, inner left, outer left).
-9. Populated weight, each rear pod (with its board + standoffs + screws).
-10. Subtract (9) - (8) = real electronics+standoffs weight per pod, to
-    sanity-check the table above.
+### B. Bumper kinematics — pending
+
+- B1. Bumper free-state stand-off from chassis face.
+- B2. Bumper travel distance before switches click.
+
+### C. Sensor positions — pending
+
+- C1. Right-front-corner side window for `WallSensorInMM`.
+- C2. Cliff sensor positions (left and right) on chassis underside.
+- C3. Magnetic strip sensor positions.
+
+### D. Vertical clearances above and below bumper face — pending
+
+- D1. Floor clearance directly below bumper face (at rest, at full depression).
+- D2. Upper-chassis clearance above bumper face (at rest, at full depression).
+
+### E. Drive geometry — pending
+
+- E1. Drive-wheel axis distance from the flat front edge.
 
 ### Layout: separate pod chassis along the front bumper
 

@@ -51,6 +51,11 @@ These do not change with mount location. Lifted from
 | SunFounder 2-ch relay module | 63×41mm | 52.2×36.6mm | M3 |
 | Yahboom PD power board | 65×56mm | 58×49mm | M2.5 |
 
+Pi 5 hole offset is **asymmetric** on the 85mm axis (verified from
+physical measurement during rear-pod work, hard-won): `pi_x_left = 6mm`
+from the non-USB edge, `pi_x_right = 64mm` — i.e., holes are NOT
+centered. Carry this forward to front-pod SCAD verbatim.
+
 Cable origins (these dictate routing, not mount location):
 
 - **Battery tap** exits chassis right side (per current MOUNTING.md plan).
@@ -380,12 +385,58 @@ Reasons to keep the pod-level modularity:
 
 ## What Carries Over from `pod-design`
 
-- Standoff geometry per board (M2.5 58×49mm, M3 33.5×45mm — the hard-won part).
-- Rib-to-standoff alignment math.
-- "Open scaffold, not a box" structural philosophy.
-- Print-flat-on-the-ribbed-face print orientation.
-- Three-pod modularity (probable — see open question above).
-- Combined-print SCAD pattern (`all_pods.scad` style for printing efficiency).
+Reviewed 2026-05-09 against `pod-design` branch (93 commits of iteration).
+
+**Definitely reuse — verbatim transfer:**
+
+- Standoff geometry per board: M2.5 with 58×49mm pattern for Pi+HAT and
+  Yahboom; M3 with 52.2×36.6mm pattern for relay (the proposal earlier
+  had this wrong as 33.5×45mm; POD_DESIGN.md is authoritative).
+- Pi+HAT asymmetric hole placement on the 85mm axis (`pi_x_left=6mm`,
+  `pi_x_right=64mm`).
+- Standoff dimensions: 9mm height, 6mm OD, hole sized for M2.5/M3 thread.
+- Ribbed-bottom + corner-posts + horizontal-rails topology — prints flat,
+  no supports, gives velcro surface, allows airflow.
+- Ribs follow standoff Y positions, plus boundary ribs.
+- Yahboom battery-cable notch: 25×20mm cutout on inner edge of base ribs.
+- Port-aware inner wall design pattern (thin posts at port-gap positions,
+  full corner posts at edges).
+- The proven gusset module — see `hardware/right_pod.scad` on `pod-design`.
+  Took ~20 commits to get the orientation right; copy the working version,
+  do not re-derive.
+
+**Probably keep but worth re-examining:**
+
+- "Three separate pods" modularity philosophy. Front-mount keeps this
+  (with camera as a fourth pod above the Pi pod).
+- Rib width 12mm for standoff alignment.
+- Center support posts on rails — needed at 60mm+ rail spans to prevent
+  PLA bridging sag. Front pods will be ~30-40mm deep so this may be
+  unnecessary; remove if rail spans are short enough.
+
+**Re-examine — front-mount is different:**
+
+- Outer-rail-reinforcement at 10mm width was for the rear pod's exposed
+  outer edge of the robot. Front pods don't have that exposure (bumper
+  takes impact, pods ride with it). Front pods can likely use uniform
+  5mm rails throughout.
+- Board-to-rail clearance: rear pods used 6mm + 2mm asymmetric (5mm rail
+  + 6mm clearance + board + 2mm clearance + 5mm rail = 103mm for an 85mm
+  Pi). Front-mount horizontal envelope is tight (~290mm for three pods);
+  worth checking whether tighter, symmetric clearance (e.g., 3mm each
+  side) is acceptable.
+
+**Major change — geometry rotates:**
+
+- Rear pod's `pod_height` = 66mm vertical extent up the chassis surface.
+- Front pod's "forward extension" = ~30-40mm (much shorter).
+- Rear pod's `pod_depth` = 70mm outward from chassis (Pi pod).
+- Front pod's "vertical extent on bumper face" = ~71mm envelope.
+- Wall structure that ran up the height in rear pods now runs across the
+  width in front pods. Names will collide if we reuse `pod_height` /
+  `pod_depth` / `pod_width` directly. **In front-pod SCAD, use names
+  like `forward_extent` / `vertical_extent` / `horizontal_extent`** to
+  avoid rotation-induced bugs.
 
 ## What Changes from `pod-design`
 

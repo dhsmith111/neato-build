@@ -322,10 +322,12 @@ directly informative.
 - C2. Cliff sensor positions (left and right) on chassis underside.
 - C3. Magnetic strip sensor positions.
 
-### D. Vertical clearances above and below bumper face — pending
+### D. Vertical clearances above and below bumper face
 
-- D1. Floor clearance directly below bumper face (at rest, at full depression).
-- D2. Upper-chassis clearance above bumper face (at rest, at full depression).
+| # | Item | Value | Notes |
+|---|------|-------|-------|
+| D1 | Floor clearance below bumper face | ~5mm at rest, with ~5mm additional margin during depression (assumed) | Not directly measured — assumption pending physical check. Pod bottom overhang must respect both numbers. |
+| D2 | Upper-chassis clearance above bumper face | pending | At rest and at full depression. |
 
 ### E. Drive geometry — pending
 

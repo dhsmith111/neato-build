@@ -1,11 +1,22 @@
 """Log all Neato sensors + camera/YOLO during a firmware Clean mode run.
 
-Uses the relay to drop USB so Clean mode starts without the
-"unplug USB" complaint, then reconnects to log everything.
+Two modes for getting Clean mode to start despite USB being plugged in:
+
+  - default ("blind") mode: drop USB first, prompt user to press button
+    during a 10s window, restore USB, log.
+
+  - --watch mode: keep USB connected, poll GetButtons until user presses
+    Start, then drop USB briefly so firmware can begin cleaning, restore
+    USB, log. User only has to press the button once.
+
+End condition for the logging loop:
+  - if a positive duration is given, log for that many seconds (default 120)
+  - if --until-stopped is given, log until either: motors stay idle for
+    IDLE_STOP_FRAMES consecutive frames, ChargingActive=1 (docked), or a
+    hard safety cap of MAX_RUN_SECONDS is reached
 
 Usage:
-    python log_clean_mode.py [duration_seconds]
-    Default: 120 seconds (2 minutes)
+    python log_clean_mode.py [--watch] [--until-stopped] [duration_seconds]
 """
 
 import json
@@ -16,8 +27,14 @@ import time
 from datetime import datetime
 from gpiozero import OutputDevice
 
+from scout.telemetry import collect_metadata, compute_summary, update_runs_index
+
 RELAY_PIN = 17
 SERIAL_PORT = '/dev/ttyACM0'
+
+# --until-stopped tuning
+IDLE_STOP_FRAMES = 30      # ~30s of all-zero motors = cleaning ended
+MAX_RUN_SECONDS = 1800     # 30min safety cap regardless of mode
 
 
 def wait_for_port(present=True, timeout=30):
@@ -34,28 +51,140 @@ def wait_for_port(present=True, timeout=30):
     return False
 
 
-def log_clean_run(duration_s=120):
+def watch_for_start_press(timeout_s=300):
+    """Poll GetButtons over USB until BTN_START is pressed.
+
+    Returns True if pressed within timeout, False otherwise. Robot must
+    be awake and USB connected. Polls roughly every 0.5s.
+    """
+    import threading
+    from neato_serial.neato import Neato
+
+    n = object.__new__(Neato)
+    n.port = SERIAL_PORT
+    n.baud = 115200
+    n.relay = None
+    n.ser = None
+    n._lock = threading.Lock()
+    n.connect()
+
+    print("[watch] polling GetButtons — press Start on the Neato...", flush=True)
+    pressed = False
+    t0 = time.time()
+    try:
+        while time.time() - t0 < timeout_s:
+            try:
+                raw = n.send("GetButtons", delay=0.2)
+                # firmware returns "BTN_START,1" when held down
+                if "BTN_START,1" in raw:
+                    pressed = True
+                    break
+            except Exception:
+                pass
+            time.sleep(0.3)
+    finally:
+        n.close()
+    return pressed
+
+
+def is_idle(motors):
+    """Return True when all relevant motors are at zero (no cleaning happening)."""
+    if not motors:
+        return False
+    return (motors.get('Brush_RPM', 0) == 0
+            and motors.get('Vacuum_RPM', 0) == 0
+            and motors.get('LeftWheel_Speed', 0) == 0
+            and motors.get('RightWheel_Speed', 0) == 0)
+
+
+def is_charging(neato):
+    """Quick non-blocking check: is the robot docked and charging?"""
+    try:
+        raw = neato.send('GetCharger', delay=0.3)
+        return 'ChargingActive,1' in raw
+    except Exception:
+        return False
+
+
+def auto_start_via_serial():
+    """Send Clean command via serial, then immediately drop+restore USB.
+
+    Bet: firmware queues the start request and begins cleaning when USB drops.
+    Returns True if cleaning appears to be running afterward, False otherwise.
+    """
+    import threading
+    from neato_serial.neato import Neato
+
+    n = object.__new__(Neato)
+    n.port = SERIAL_PORT
+    n.baud = 115200
+    n.relay = None
+    n.ser = None
+    n._lock = threading.Lock()
+    n.connect()
+    print("[auto-start] sending 'Clean' command...", flush=True)
+    try:
+        n.send("Clean", delay=0.5)
+    except Exception as e:
+        print(f"[auto-start] Clean send failed: {e}", flush=True)
+    finally:
+        n.close()
+    return True
+
+
+def log_clean_run(duration_s=120, watch=False, until_stopped=False, auto_start=False):
+    # --- Phase 0: Collect metadata before any USB juggling ---
+    metadata = collect_metadata(duration_s)
+    metadata["watch_mode"] = watch
+    metadata["until_stopped"] = until_stopped
+    metadata["auto_start"] = auto_start
+
     relay = OutputDevice(RELAY_PIN, active_high=True, initial_value=True)
 
-    # --- Phase 1: Drop USB so Clean mode will start ---
-    print("[log] cutting USB (relay off)...", flush=True)
-    relay.off()
+    if auto_start:
+        # --- Auto-start flow: send Clean over serial, then bounce USB ---
+        print("[log] auto-start mode — sending Clean via serial then dropping USB", flush=True)
+        auto_start_via_serial()
+        time.sleep(0.3)
+        relay.off()
+        if not wait_for_port(present=False, timeout=5):
+            print("[log] WARNING: port didn't drop after relay off", flush=True)
+        time.sleep(5)
+        relay.on()
+    elif watch:
+        # --- Watch flow: USB stays on; we wait for the button, then bounce USB ---
+        print("[log] watch mode — USB stays connected, waiting for Start press", flush=True)
+        if not watch_for_start_press(timeout_s=300):
+            print("[log] no Start press in 5 minutes — aborting", flush=True)
+            return
 
-    if not wait_for_port(present=False, timeout=10):
-        print("[log] WARNING: serial port didn't disappear, trying anyway", flush=True)
+        # User pressed Start. Firmware is showing "please unplug." Drop USB
+        # so it processes the (queued) start command, then restore.
+        print("[log] Start detected — bouncing USB to release the firmware", flush=True)
+        relay.off()
+        if not wait_for_port(present=False, timeout=5):
+            print("[log] WARNING: port didn't drop after relay off", flush=True)
+        time.sleep(5)  # give firmware time to begin cleaning
+        relay.on()
+    else:
+        # --- Blind flow: drop USB first, user presses button during the window ---
+        print("[log] cutting USB (relay off)...", flush=True)
+        relay.off()
+        if not wait_for_port(present=False, timeout=10):
+            print("[log] WARNING: serial port didn't disappear, trying anyway", flush=True)
 
-    print("", flush=True)
-    print("=" * 50, flush=True)
-    print("  >>> PRESS THE CLEAN BUTTON ON THE NEATO <<<", flush=True)
-    print("=" * 50, flush=True)
-    print("", flush=True)
-    print("[log] waiting 10 seconds for cleaning to start...", flush=True)
-    time.sleep(10)
+        print("", flush=True)
+        print("=" * 50, flush=True)
+        print("  >>> PRESS THE CLEAN BUTTON ON THE NEATO <<<", flush=True)
+        print("=" * 50, flush=True)
+        print("", flush=True)
+        print("[log] waiting 10 seconds for cleaning to start...", flush=True)
+        time.sleep(10)
 
-    # --- Phase 2: Restore USB mid-clean ---
-    print("[log] restoring USB (relay on)...", flush=True)
-    relay.on()
+        print("[log] restoring USB (relay on)...", flush=True)
+        relay.on()
 
+    # --- Common: wait for port + settle ---
     print("[log] waiting for serial port...", flush=True)
     if not wait_for_port(present=True, timeout=15):
         print("[log] ERROR: serial port never reappeared!", flush=True)
@@ -97,11 +226,25 @@ def log_clean_run(duration_s=120):
     entries = []
     frame = 0
     t_start = time.time()
+    idle_streak = 0
+    stop_reason = "duration_reached"
 
-    print(f"[log] logging for {duration_s}s — press Ctrl+C to stop early", flush=True)
+    if until_stopped:
+        print(f"[log] until-stopped mode — capping at {MAX_RUN_SECONDS}s safety, idle stop after {IDLE_STOP_FRAMES} idle frames", flush=True)
+    else:
+        print(f"[log] logging for {duration_s}s — press Ctrl+C to stop early", flush=True)
 
     try:
-        while time.time() - t_start < duration_s:
+        while True:
+            elapsed = time.time() - t_start
+            if until_stopped:
+                if elapsed >= MAX_RUN_SECONDS:
+                    stop_reason = "max_run_seconds_cap"
+                    break
+            else:
+                if elapsed >= duration_s:
+                    stop_reason = "duration_reached"
+                    break
             t0 = time.time()
             entry = {"frame": frame, "timestamp": t0, "elapsed_s": round(t0 - t_start, 2)}
 
@@ -200,6 +343,25 @@ def log_clean_run(duration_s=120):
                   f"det={n_det} [{labels}]{bumpers}",
                   flush=True)
 
+            # --- Stop-condition tracking when --until-stopped ---
+            if until_stopped:
+                if is_idle(motors):
+                    idle_streak += 1
+                    if idle_streak == 5:
+                        print(f"[log] motors idle for 5 frames — verifying with charger check", flush=True)
+                    if idle_streak >= IDLE_STOP_FRAMES:
+                        if is_charging(neato):
+                            stop_reason = "docked_and_charging"
+                        else:
+                            stop_reason = "motors_idle_timeout"
+                        print(f"[log] stop condition: {stop_reason}", flush=True)
+                        frame += 1
+                        break
+                else:
+                    if idle_streak >= 5:
+                        print(f"[log] motors active again — resetting idle streak", flush=True)
+                    idle_streak = 0
+
             frame += 1
 
     except KeyboardInterrupt:
@@ -209,12 +371,24 @@ def log_clean_run(duration_s=120):
     camera.stop()
     print("[log] camera stopped", flush=True)
 
-    # Save log
+    # Save raw log
     log_path = f"{out_dir}/sensor_log.json"
     with open(log_path, 'w') as f:
         json.dump(entries, f, indent=2)
+    print(f"[log] saved {len(entries)} frames to {log_path} (stop_reason={stop_reason})", flush=True)
 
-    print(f"[log] saved {len(entries)} frames to {log_path}", flush=True)
+    # Save metadata
+    metadata["stop_reason"] = stop_reason
+    with open(f"{out_dir}/metadata.json", 'w') as f:
+        json.dump(metadata, f, indent=2)
+
+    # Compute and save summary; update runs.json index
+    summary = compute_summary(entries, metadata)
+    summary["stop_reason"] = stop_reason
+    with open(f"{out_dir}/summary.json", 'w') as f:
+        json.dump(summary, f, indent=2)
+    update_runs_index(out_dir, summary)
+    print(f"[log] summary written + runs index updated", flush=True)
 
     # Don't try to stop cleaning — let it finish or user presses button
     neato.close()
@@ -226,5 +400,10 @@ def log_clean_run(duration_s=120):
 
 if __name__ == "__main__":
     signal.signal(signal.SIGABRT, lambda *a: sys.exit(0))
-    duration = int(sys.argv[1]) if len(sys.argv) > 1 else 120
-    log_clean_run(duration)
+    args = [a for a in sys.argv[1:] if a]
+    watch = "--watch" in args
+    until_stopped = "--until-stopped" in args
+    auto_start = "--auto-start" in args
+    args = [a for a in args if not a.startswith("--")]
+    duration = int(args[0]) if args else 120
+    log_clean_run(duration, watch=watch, until_stopped=until_stopped, auto_start=auto_start)

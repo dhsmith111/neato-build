@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Neato XV front-mount layout (top-down view, robot facing UP in this drawing).
+
+  Scale: 1 SVG unit = 1 mm (approximately).
+  Chassis dimensions are estimates (see FRONT_MOUNT_PROPOSAL.md). Sensor and
+  feature positions are illustrative only — to be revised after caliper
+  measurements on the actual robot.
+
+  Pod horizontal order (driver's POV, looking at robot from the front):
+    Yahboom (outer left) — Pi+HAT (center) — Relay (inner right) — Camera (above center, separate pod)
+
+  Cable runs shown as dashed lines.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-30 -30 400 360" width="800" height="720" font-family="sans-serif" font-size="9">
+
+  <defs>
+    <pattern id="velcro" patternUnits="userSpaceOnUse" width="6" height="6">
+      <rect width="6" height="6" fill="#fff5d6"/>
+      <path d="M0,3 L6,3 M3,0 L3,6" stroke="#d4a000" stroke-width="0.5"/>
+    </pattern>
+    <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <!-- TITLE / LEGEND BAND -->
+  <text x="170" y="-15" text-anchor="middle" font-size="14" font-weight="bold">
+    Neato XV — Front-Mount Layout (top-down, robot facing up)
+  </text>
+  <text x="170" y="-2" text-anchor="middle" font-size="9" fill="#666">
+    Estimates only — sensor positions illustrative until calipered.
+  </text>
+
+  <!-- ============== CHASSIS (D-shape, flat front, round rear) ============== -->
+  <!-- Width 330, depth 318. Front edge at y=0, round rear from y~158 with radius ~165. -->
+  <path d="M 0,0 L 330,0 L 330,158 A 165,165 0 0 1 0,158 Z"
+        fill="#f0f0f0" stroke="#888" stroke-width="1.5"/>
+
+  <!-- Wheels (drive wheels, slightly behind center, ~76mm dia) -->
+  <rect x="20" y="120" width="20" height="50" rx="3" fill="#333"/>
+  <rect x="290" y="120" width="20" height="50" rx="3" fill="#333"/>
+  <text x="30" y="195" text-anchor="middle" font-size="8" fill="#333">L wheel</text>
+  <text x="300" y="195" text-anchor="middle" font-size="8" fill="#333">R wheel</text>
+
+  <!-- LDS turret (centered, offset toward rear ~3rd; ~95mm dia) -->
+  <circle cx="165" cy="200" r="48" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3,2"/>
+  <circle cx="165" cy="200" r="3" fill="#999"/>
+  <text x="165" y="204" text-anchor="middle" font-size="8" fill="#999">LDS</text>
+  <text x="220" y="200" font-size="7" fill="#999">lidar dome (above plane)</text>
+
+  <!-- Dust bin / brush bay (rough — central) -->
+  <rect x="80" y="80" width="170" height="60" fill="none" stroke="#ccc" stroke-dasharray="2,2"/>
+  <text x="165" y="113" text-anchor="middle" font-size="7" fill="#bbb">brush bay / bin (approx)</text>
+
+  <!-- Battery quarters (rear) -->
+  <rect x="20" y="170" width="70" height="50" fill="#fff" stroke="#dec" stroke-dasharray="2,2"/>
+  <text x="55" y="198" text-anchor="middle" font-size="7" fill="#5a8">L battery</text>
+  <rect x="240" y="170" width="70" height="50" fill="#fff" stroke="#dec" stroke-dasharray="2,2"/>
+  <text x="275" y="198" text-anchor="middle" font-size="7" fill="#5a8">R battery</text>
+
+  <!-- ============== BUMPER FACE (front of chassis, with sensors) ============== -->
+  <!-- Bumper sits in front of y=0, ~5-10mm out, ~50-60mm tall. In top-down, bumper depth is along y. -->
+  <rect x="5" y="-12" width="320" height="12" fill="#e0e0e0" stroke="#666" stroke-width="1"/>
+  <text x="165" y="-3" text-anchor="middle" font-size="7" fill="#444">front bumper face</text>
+
+  <!-- IR rangefinder sensor windows (4 forward Sharp 0A51SK), illustrative positions -->
+  <circle cx="55" cy="-6" r="3" fill="#f88" stroke="#a00" stroke-width="0.5"/>
+  <circle cx="125" cy="-6" r="3" fill="#f88" stroke="#a00" stroke-width="0.5"/>
+  <circle cx="205" cy="-6" r="3" fill="#f88" stroke="#a00" stroke-width="0.5"/>
+  <circle cx="275" cy="-6" r="3" fill="#f88" stroke="#a00" stroke-width="0.5"/>
+  <text x="55" y="-16" text-anchor="middle" font-size="6" fill="#a00">IR1</text>
+  <text x="125" y="-16" text-anchor="middle" font-size="6" fill="#a00">IR2</text>
+  <text x="205" y="-16" text-anchor="middle" font-size="6" fill="#a00">IR3</text>
+  <text x="275" y="-16" text-anchor="middle" font-size="6" fill="#a00">IR4</text>
+
+  <!-- Cliff sensors (under chassis at front edge, illustrative) -->
+  <circle cx="50" cy="3" r="2" fill="#fff" stroke="#06c" stroke-width="0.7"/>
+  <circle cx="280" cy="3" r="2" fill="#fff" stroke="#06c" stroke-width="0.7"/>
+  <text x="50" y="14" text-anchor="middle" font-size="6" fill="#06c">cliff</text>
+  <text x="280" y="14" text-anchor="middle" font-size="6" fill="#06c">cliff</text>
+
+  <!-- Bumper edges (where upper case pinches — avoid velcro here) -->
+  <rect x="5" y="-12" width="22" height="12" fill="#e8a8a8" fill-opacity="0.5"/>
+  <rect x="303" y="-12" width="22" height="12" fill="#e8a8a8" fill-opacity="0.5"/>
+  <text x="16" y="-2" text-anchor="middle" font-size="5" fill="#a00">no</text>
+  <text x="314" y="-2" text-anchor="middle" font-size="5" fill="#a00">no</text>
+
+  <!-- ============== PODS (forward of bumper face, sticking out toward viewer) ============== -->
+  <!-- Pod "forward extension" depth ~30-35mm (estimate, half rear-pod depth thanks to orientation rotation). -->
+  <!-- Pods drawn as rectangles in front of the bumper, with velcro pattern on the pod side touching the bumper. -->
+
+  <!-- YAHBOOM POD (outer left) -->
+  <!-- Yahboom board: 65 x 56mm. Long axis horizontal. Pod ~85 wide x 35 deep (depth = forward extension). -->
+  <g transform="translate(35,-50)">
+    <!-- Pod outline -->
+    <rect x="0" y="0" width="85" height="35" fill="#dfe7f5" stroke="#345" stroke-width="1"/>
+    <!-- Velcro band on pod's bumper-facing side (bottom edge in this view) -->
+    <rect x="5" y="30" width="75" height="5" fill="url(#velcro)" stroke="#a80" stroke-width="0.3"/>
+    <!-- Yahboom board outline -->
+    <rect x="10" y="6" width="65" height="20" fill="#fff" stroke="#789" stroke-width="0.5"/>
+    <text x="42.5" y="18" text-anchor="middle" font-size="7" fill="#345">Yahboom PD</text>
+    <text x="42.5" y="-3" text-anchor="middle" font-size="7" fill="#345" font-weight="bold">OUTER LEFT POD</text>
+    <!-- KF301 battery terminals (left edge of board, faces outer-left) -->
+    <rect x="5" y="10" width="3" height="12" fill="#fa6"/>
+    <text x="-3" y="18" text-anchor="end" font-size="6" fill="#a60">batt in</text>
+    <!-- USB-C output (right edge of board, faces inward toward Pi pod) -->
+    <rect x="76" y="13" width="3" height="6" fill="#48c"/>
+    <text x="92" y="18" font-size="6" fill="#048">USB-C → Pi</text>
+  </g>
+
+  <!-- PI + HAT POD (center) -->
+  <!-- Pi 5 board 85 x 58mm; with rails ~95 x 70mm. Pod ~110 wide x 40 deep. -->
+  <g transform="translate(120,-55)">
+    <rect x="0" y="0" width="110" height="40" fill="#dfe7f5" stroke="#345" stroke-width="1"/>
+    <rect x="5" y="35" width="100" height="5" fill="url(#velcro)" stroke="#a80" stroke-width="0.3"/>
+    <!-- Pi 5 + HAT (long axis 85mm horizontal) -->
+    <rect x="12" y="6" width="85" height="25" fill="#fff" stroke="#789" stroke-width="0.5"/>
+    <text x="55" y="20" text-anchor="middle" font-size="7" fill="#345">Pi 5 + AI HAT+ 2</text>
+    <text x="55" y="-3" text-anchor="middle" font-size="7" fill="#345" font-weight="bold">CENTER POD</text>
+    <!-- USB-C power input (left short edge) -->
+    <rect x="9" y="14" width="3" height="6" fill="#48c"/>
+    <text x="6" y="13" text-anchor="end" font-size="6" fill="#048">USB-C in</text>
+    <!-- USB-A ports (right short edge) -->
+    <rect x="97" y="9" width="3" height="6" fill="#666"/>
+    <rect x="97" y="17" width="3" height="6" fill="#666"/>
+    <text x="103" y="13" font-size="6" fill="#444">USB-A</text>
+    <!-- Ethernet (right short edge, lower) -->
+    <rect x="97" y="25" width="3" height="6" fill="#393"/>
+    <text x="103" y="29" font-size="6" fill="#393">eth</text>
+    <!-- Camera CSI (top long edge, faces upward — toward camera pod) -->
+    <rect x="40" y="3" width="20" height="2" fill="#fc6"/>
+    <text x="50" y="-8" text-anchor="middle" font-size="6" fill="#a60">CSI ↑ to camera</text>
+  </g>
+
+  <!-- RELAY POD (inner right) -->
+  <!-- SunFounder 2ch relay 63 x 41mm, rails ~75 x 55mm. Pod ~80 wide x 35 deep. -->
+  <g transform="translate(235,-50)">
+    <rect x="0" y="0" width="80" height="35" fill="#dfe7f5" stroke="#345" stroke-width="1"/>
+    <rect x="5" y="30" width="70" height="5" fill="url(#velcro)" stroke="#a80" stroke-width="0.3"/>
+    <rect x="9" y="7" width="63" height="18" fill="#fff" stroke="#789" stroke-width="0.5"/>
+    <text x="40" y="18" text-anchor="middle" font-size="7" fill="#345">2ch Relay</text>
+    <text x="40" y="-3" text-anchor="middle" font-size="7" fill="#345" font-weight="bold">INNER RIGHT POD</text>
+    <!-- Control header (left edge, faces Pi pod) -->
+    <rect x="6" y="10" width="3" height="10" fill="#888"/>
+    <text x="3" y="18" text-anchor="end" font-size="6" fill="#666">ctrl ← Pi</text>
+    <!-- USB switched terminals (right edge, faces inward to chassis) -->
+    <rect x="72" y="9" width="3" height="6" fill="#fa6"/>
+    <rect x="72" y="17" width="3" height="6" fill="#fa6"/>
+    <text x="92" y="14" font-size="6" fill="#a60">USB</text>
+    <text x="92" y="22" font-size="6" fill="#a60">in/out</text>
+  </g>
+
+  <!-- CAMERA POD (above center, separate small pod) -->
+  <!-- Camera Module 3 Wide ~25 x 24mm. Pod ~40 wide x 30 deep, sits above Pi pod. -->
+  <g transform="translate(155,-90)">
+    <rect x="0" y="0" width="40" height="30" fill="#dfe7f5" stroke="#345" stroke-width="1"/>
+    <rect x="3" y="25" width="34" height="5" fill="url(#velcro)" stroke="#a80" stroke-width="0.3"/>
+    <circle cx="20" cy="13" r="6" fill="#222" stroke="#666"/>
+    <circle cx="20" cy="13" r="3" fill="#06c"/>
+    <text x="20" y="-3" text-anchor="middle" font-size="7" fill="#345" font-weight="bold">CAMERA POD</text>
+    <text x="20" y="29" text-anchor="middle" font-size="6" fill="#345">lens →forward (out of page)</text>
+  </g>
+
+  <!-- ============== CABLE RUNS ============== -->
+  <!-- Battery cable: chassis right side → around back → to outer-left Yahboom -->
+  <path d="M 320,80 Q 325,40 325,0 Q 325,-30 280,-40 Q 200,-55 100,-50 L 35,-40 L 30,-25"
+        fill="none" stroke="#a00" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#arrow)"/>
+  <text x="290" y="-25" font-size="6" fill="#a00">battery 14.4V</text>
+  <text x="290" y="-18" font-size="6" fill="#a00">(long routing)</text>
+
+  <!-- Yahboom USB-C to Pi USB-C -->
+  <path d="M 116,-37 L 130,-41" fill="none" stroke="#06c" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrow)"/>
+  <text x="118" y="-44" font-size="6" fill="#06c">USB-C PD</text>
+
+  <!-- Pi USB-A to relay -->
+  <path d="M 220,-41 L 240,-40" fill="none" stroke="#a60" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrow)"/>
+  <text x="225" y="-44" font-size="6" fill="#a60">USB serial</text>
+
+  <!-- Relay switched USB into chassis -->
+  <path d="M 310,-30 Q 320,-15 305,5 L 250,15"
+        fill="none" stroke="#a60" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arrow)"/>
+  <text x="295" y="0" font-size="6" fill="#a60">to Neato USB</text>
+
+  <!-- Pi GPIO to relay control -->
+  <path d="M 232,-31 L 240,-34" fill="none" stroke="#888" stroke-width="0.7" stroke-dasharray="2,1" marker-end="url(#arrow)"/>
+  <text x="222" y="-29" font-size="5" fill="#666">GPIO</text>
+
+  <!-- Camera CSI to Pi -->
+  <path d="M 175,-60 L 175,-49" fill="none" stroke="#fa0" stroke-width="0.8" stroke-dasharray="2,1" marker-end="url(#arrow)"/>
+  <text x="180" y="-58" font-size="5" fill="#a60">CSI</text>
+
+  <!-- ============== LEGEND ============== -->
+  <g transform="translate(0, 250)">
+    <text x="0" y="0" font-size="8" font-weight="bold">Legend:</text>
+    <rect x="0" y="6" width="14" height="6" fill="#dfe7f5" stroke="#345"/>
+    <text x="20" y="11" font-size="7">pod shell</text>
+    <rect x="0" y="16" width="14" height="6" fill="url(#velcro)" stroke="#a80" stroke-width="0.3"/>
+    <text x="20" y="21" font-size="7">velcro band on pod's bumper-facing surface</text>
+    <circle cx="7" cy="29" r="3" fill="#f88" stroke="#a00"/>
+    <text x="20" y="31" font-size="7">forward IR rangefinder window (×4) — keep clear</text>
+    <circle cx="7" cy="39" r="2" fill="#fff" stroke="#06c"/>
+    <text x="20" y="41" font-size="7">cliff sensor (chassis underside, downward) — keep clear</text>
+    <rect x="0" y="46" width="14" height="6" fill="#e8a8a8" fill-opacity="0.5"/>
+    <text x="20" y="51" font-size="7">bumper sides where upper case pinches — no velcro here</text>
+    <line x1="0" y1="60" x2="14" y2="60" stroke="#a00" stroke-width="1.2" stroke-dasharray="4,2"/>
+    <text x="20" y="62" font-size="7">battery cable (14.4V from chassis right side, long route)</text>
+    <line x1="0" y1="70" x2="14" y2="70" stroke="#06c" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="20" y="72" font-size="7">USB-C PD (Yahboom → Pi power)</text>
+    <line x1="0" y1="80" x2="14" y2="80" stroke="#a60" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="20" y="82" font-size="7">USB serial (relay-switched, between Pi and Neato)</text>
+    <line x1="0" y1="90" x2="14" y2="90" stroke="#fa0" stroke-width="0.8" stroke-dasharray="2,1"/>
+    <text x="20" y="92" font-size="7">camera CSI ribbon</text>
+  </g>
+
+  <g transform="translate(200, 250)">
+    <text x="0" y="0" font-size="8" font-weight="bold">Notes:</text>
+    <text x="0" y="12" font-size="7">• Pod count and exact dimensions are estimates.</text>
+    <text x="0" y="22" font-size="7">• Pods stick forward of bumper ~30-40mm (top-down view shows them above</text>
+    <text x="0" y="30" font-size="7">  the bumper line — they actually extend out of the page toward viewer).</text>
+    <text x="0" y="42" font-size="7">• Pods can extend above/below bumper-face vertical band; only velcro band</text>
+    <text x="0" y="50" font-size="7">  contacts the bumper face.</text>
+    <text x="0" y="62" font-size="7">• Lidar dome is offset toward rear of robot — forward arc above pods is</text>
+    <text x="0" y="70" font-size="7">  the constraint, not the dome itself directly above the pods.</text>
+    <text x="0" y="82" font-size="7">• Battery cable routing across the back is long. Consider Yahboom OUTER</text>
+    <text x="0" y="90" font-size="7">  RIGHT instead, to shorten battery cable run. Trade-off: USB-C run to</text>
+    <text x="0" y="98" font-size="7">  Pi gets longer if Pi stays centered.</text>
+  </g>
+</svg>

@@ -60,15 +60,32 @@ Verified on the physical robot (Board Rev 64, FW 3.4.24079) via
 - **Cliff and magnetic strip sensors** — on chassis, not affected by
   bumper-mounted pods.
 
+## Prototype Observations
+
+- **Charging through dock: works** (verified 2026-05-09). The robot mates
+  with the dock and charges normally despite the front-mount payload.
+  This was the single biggest functional risk for the rear-mount approach
+  the front-mount was chosen to avoid — confirmed solved.
+- **Curved-shell pods sit tilted on the flat bumper face.** Yahboom and
+  relay pod prints (rear-mount design with curved outer shells) don't
+  sit flush against the bumper — they tilt with one edge against the
+  bumper and the other edge gapped. Velcro is holding via partial contact
+  on the closer edge. Functional for prototype but not ideal long-term.
+- **Battery cabling routed over-the-top** (over the lidar cover) rather
+  than around the right side of the chassis. Cleaner than the original
+  side-routing plan.
+- **Camera is mounted on a separate small bracket** in front of the Pi
+  case, lens facing forward. Stands forward of all three pods — the
+  camera bracket is now the frontmost point of the robot.
+
 ## What's Next
 
-The prototype tests:
-- Whether velcro on the bumper face holds ~100g+ pods through bump events.
-- Whether the rear pods' curved outer shells contact the bumper face
-  enough to anchor reliably.
+Open prototype tests:
 - Whether the bumper still depresses and returns cleanly with payload.
-- Whether the robot still drives, navigates, docks, and avoids triggering
-  cliff sensors with forward CG shift.
+- Whether the robot drives, navigates, and avoids triggering cliff
+  sensors with forward CG shift.
+- Whether velcro adhesion holds long-term given partial contact on the
+  curved-shell pods.
 
 Once evaluated, decisions on whether to:
 - Print front-mount-specific pods (designs in [FRONT_MOUNT_PROPOSAL.md](FRONT_MOUNT_PROPOSAL.md)

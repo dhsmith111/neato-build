@@ -64,25 +64,56 @@ the most (right-side rear → around to front).
 
 ## Constraints New to Front-Mount
 
-### The bumper is a sensor array, not just a bump panel
+### Bumper is mechanically active, optically irrelevant
 
-The single most important finding from the chassis research: **all of the
-robot's forward environment sensing lives in the front bumper / front edge.
-There is no rear or side cliff sensing.** Any front-mount structure has to
-preserve every one of these:
+Verified 2026-05-09 against the Neato Programmer's Manual sensor enums and
+multiple teardowns (RECESSIM, Fictiv, SparkFun): **the XV Signature Pro
+front bumper contains only mechanical tactile microswitches — no IR
+rangefinders look forward through the bumper face.** An earlier draft of
+this doc carried a wrong claim about "4 forward Sharp 0A51SK IR
+rangefinders behind the bumper"; that claim conflated the XV-11's *side*
+wall sensor with hypothetical front rangefinders. The bumper face is solid
+plastic and the owner's external observation of "no IR windows" is correct
+and expected.
 
-| Sensor | Count | What it does | Front-mount implication |
-|--------|-------|--------------|-------------------------|
-| Bump switches | 4 (L-side, top-L, top-R, R-side) | Detect physical contact | Bumper must retain full ~2-4mm travel; structure must not bind on bumper sides |
-| Sharp 0A51SK IR rangefinders | 4 | Look **forward** through the bumper face | Their forward line-of-sight must stay clear |
-| Cliff/drop sensors (optical, downward) | 2 | Look **down** from the front edge | Structure must not block their downward view |
-| Magnetic strip sensors | up to 4 | Detect floor boundary markers | Structure must not block their pickup near the floor |
+| Sensor | Count | Where it is | Front-mount implication |
+|--------|-------|-------------|-------------------------|
+| Bump tactile switches (`LSIDEBIT`, `LFRONTBIT`, `RSIDEBIT`, `RFRONTBIT`) | 4 | Behind bumper, lever arms riding on inner shell face | Bumper must retain full ~2-4mm travel; structure must not bind on bumper sides |
+| IR wall sensor (`WallSensorInMM`) | 1 | **Side-facing**, at the **front-right corner** | Pod placement on the bumper face must NOT extend right enough to cover or block the side window where this sensor looks outward |
+| Cliff/drop sensors (`LeftDropInMM`, `RightDropInMM`) | 2 | On the **chassis underside**, flanking the brush | Not behind bumper — front-mount pods don't affect them directly, but front-cantilever sag could mistrigger them |
+| Magnetic strip sensors (`LeftMagSensor`, `RightMagSensor`) | 2 | On the chassis, near the floor | Pickup is near the floor; pod bottom overhang must not shroud them |
 
-In short: the bumper face is full of forward-looking optics, not just a
-mechanical bump panel. Any "pod stuck on the front" risks occluding multiple
-sensors at once. This materially changes the design problem from what was
-assumed at the start of this proposal — the front is the robot's eyes, not a
-blank wall.
+**Implications for front-mount design:**
+
+1. **No IR window occlusion problem** on the bumper face itself. A pod can
+   sit anywhere across the front face without breaking forward sensing,
+   because there is no forward optical sensing through the bumper.
+2. **Right-front-corner side window is the one optic to preserve.** The
+   single wall sensor on the right corner needs its sideways line-of-sight
+   clear. The current layout sketch puts the relay pod near that area —
+   need to verify clearance once the side window position is measured.
+3. **The bumper is a pure mechanical interface.** Velcro on the bumper
+   face works as planned; the only constraints are bumper side pinch
+   zones and bumper-travel preservation.
+
+### Verification on actual hardware (recommended, easy)
+
+Once the Pi is wired to the Neato over USB serial (already supported by
+`neato_serial/neato.py`), confirm via:
+
+```
+TestMode On
+GetAnalogSensors
+GetDigitalSensors
+TestMode Off
+```
+
+Expected — `GetAnalogSensors` returns one forward-distance value
+(`WallSensorInMM`) that changes when something is brought near the
+**right-front corner**, not the front center. `GetDigitalSensors` returns
+4 bumper bits (`LSIDEBIT/LFRONTBIT/RSIDEBIT/RFRONTBIT`) that toggle
+individually when each bumper quadrant is pressed. If the output matches,
+the analysis above is confirmed for this specific unit.
 
 ### Mount approach: velcro on the bumper face, chassis rides with the bumper
 
@@ -101,9 +132,10 @@ Velcro placement constraints (vertical band on the bumper face only):
 - **Not near the sides** — bumper sides are where the upper case pinches
   the shell; pulling on the velcro there could cause the "stuck bumper"
   failure mode.
-- **Avoid the IR rangefinder windows** — 4 Sharp 0A51SK sensors look forward
-  through the bumper face. Velcro patches must not cover them, and the
-  chassis itself must not block their forward line-of-sight.
+- **Don't shroud the right-front-corner side window.** The single
+  side-facing IR wall sensor lives there. Velcro patches and pod outer
+  shells on the bumper face must not extend right enough to block its
+  sideways line-of-sight.
 
 **Pod orientation: same topology as rear pods, rotated 90°.** Each pod's
 "bottom" face (the ribbed velcro surface, in rear-pod terms) presses
@@ -274,7 +306,8 @@ have to model the bumper area from caliper measurements ourselves.
 2. Bumper free-state stand-off from chassis face.
 3. Bumper travel distance before switches click.
 4. Front cliff-sensor window positions on the chassis underside.
-5. Front IR rangefinder window positions on the bumper face (Sharp 0A51SK x4).
+5. **Right-front-corner side window** position for the IR wall sensor
+   (`WallSensorInMM`). The one optic to preserve on this chassis.
 6. Front magnetic strip sensor positions.
 7. Drive-wheel axis distance from the flat front edge.
 8. **Floor clearance directly below the bumper face**, both at rest and at

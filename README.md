@@ -25,9 +25,9 @@ The Neato already has LiDAR-based navigation and mapping. This project adds a vi
 | Cameras | Pi Camera Module 3 Wide + Camera Module 3 Wide NoIR |
 | Serial | USB-A to Mini-USB with relay on VBUS for power cycling |
 | Power | Yahboom PD board (Neato 4S Li-ion → 5V/5A to Pi via USB-C PD) |
-| Mounting | Velcro for prototyping, 3D printed platform planned |
+| Mounting | Front-bumper-mount prototype: Pi+HAT in OEM case + 3D-printed pods for Yahboom and relay, all velcro'd to the front bumper face |
 
-The Pi + HAT + camera stack mounts on top of the Neato's LiDAR cover. The relay breaks the USB power line so the Pi can hard-reset the Neato's serial interface when needed. See [mounting diagram](docs/mounting-layout.svg).
+The electronics mount to the front bumper face: the Pi 5 + AI HAT+ 2 stays in its OEM CanaKit Turbine Case, while the Yahboom PD board and the SunFounder relay sit in 3D-printed open-frame pods (originally designed for rear-mount, now repurposed). All three are velcro'd to the bumper face and ride with the bumper through bump events. The relay breaks the USB power line so the Pi can hard-reset the Neato's serial interface when needed. See [front-mount layout](docs/front-mount-layout.svg) and [MOUNTING.md](docs/MOUNTING.md) for the current prototype, and [FRONT_MOUNT_PROPOSAL.md](docs/FRONT_MOUNT_PROPOSAL.md) for design rationale.
 
 ## Development Stages
 
@@ -100,4 +100,8 @@ Requires Raspberry Pi 5 with gpiozero + lgpio backend (RPi.GPIO is not supported
 - [Power System](docs/POWER.md) — Battery specs, Yahboom PD board, wiring plan
 - [Wiring Reference](docs/WIRING.md) — Relay, serial, camera connections
 - [Software Setup](docs/SETUP.md) — Stack, robot config, troubleshooting
-- [Mounting Layout](docs/mounting-layout.svg) — Physical component placement
+- [Mounting (current)](docs/MOUNTING.md) — Front-bumper-mount prototype state and cable routing
+- [Front-Mount Proposal](docs/FRONT_MOUNT_PROPOSAL.md) — Design rationale and per-pod decisions
+- [Pod Design](docs/POD_DESIGN.md) — SCAD pod design details (rear-mount origin, repurposed for front)
+- [Front-Mount Layout](docs/front-mount-layout.svg) — Top-down + side-view diagram
+- [Original Top-Mount Sketch](docs/mounting-layout.svg) — Earliest sketch (now historical)

@@ -354,14 +354,83 @@ hits something during normal operation.
 
 Same modularity philosophy as the rear-pod plan: **separate pod chassis per
 component**, each individually velcro'd to the bumper face along a
-horizontal band. Likely three pods (Pi+HAT, Yahboom, relay) plus a camera
-mount, but exact count and layout to be determined.
+horizontal band. Three pods (Pi+HAT, Yahboom, relay) plus a camera mount.
 
 Reasons to keep the pod-level modularity:
 - Reprint one pod when its design changes, not the whole front.
 - Iteration on camera mount geometry is independent of the heavier pods.
 - Failure of one velcro attachment doesn't cascade.
 - Reuses the existing per-pod SCAD module structure from `pod-design`.
+
+### Pi 5 + AI HAT+ 2 stays in its OEM Turbine Case
+
+**Decision 2026-05-09:** the Pi+HAT goes back into the original CanaKit
+Turbine Case (from the GenAI Kit) instead of being mounted on bare standoffs
+inside a custom pod.
+
+Reasons:
+- OEM enclosure provides full top/bottom/side protection — solves the
+  "electronics middle exposed" concern for free.
+- Active cooling and fan vents already designed for this stack.
+- Port openings already cut at the right places — no port-aware pod wall
+  design needed for the Pi pod.
+- Reversible — the Pi can come out cleanly for other uses.
+- The Turbine Case is smaller than the bare-board Pi pod we were sizing
+  (~95mm wide vs. ~110mm planned), gaining ~15mm of horizontal bumper
+  budget for inter-pod gaps.
+
+**Implication for the front Pi pod design:** the "Pi pod" becomes a
+**velcro tray + retention frame** that holds the Turbine Case against the
+bumper face. Not a custom board enclosure. SCAD reduces to:
+- Velcro footprint sized to the case bottom.
+- Optional retention lip / frame around the case to prevent sideways slide
+  during bump events.
+- Bumper-facing ribbed base, like the other pods.
+
+**Open Pi-pod questions (need physical measurement):**
+- Exact Turbine Case dimensions with Pi+HAT inside.
+- Case mounting hole pattern on the bottom (whether to bolt the case to
+  the pod tray or rely on velcro + retention lip alone).
+- Active cooler reinstall confirmed (was removed during weight research;
+  needs to go back in for the case to thermally function as designed).
+- Camera CSI cable routing through the case CSI cutout to the camera pod.
+
+### Yahboom and relay pods — bare-board, custom enclosure
+
+These two pods follow the original front-pod plan: bare board on standoffs,
+ribbed bumper-facing base, four protective side walls.
+
+**Wall structure decisions 2026-05-09 (restoring pre-consolidation rear-pod
+values + adding new top/bottom walls for front-mount orientation):**
+
+Reasoning: in the rear-pod consolidation (commit `9918045`), wall heights
+were reduced (outer 75%, inner 50%) and the mid beam was moved from a
+deliberate Z=32 ("raised to clear ports, board at 14mm, ports span
+14-29mm") to Z=22.25 (inside the port band). This caused partial port
+blocking — confirmed by user during physical fitting. Pre-consolidation
+values are restored.
+
+| Element | Value |
+|---|---|
+| All four side walls (left, right, top, bottom) | **66mm** tall (full pod_height) |
+| Mid beam Z (bottom edge) | **32mm** (clears 14-29mm port band) |
+| Top beam Z (bottom edge) | **61mm** (`wall_h - rail_w`) |
+| Inter-port thin posts (where applicable) | up to mid beam Z=32 |
+| Center post above mid beam | Z=37 to Z=61 |
+| Forward face | open (heatsink airflow + LED visibility) |
+| Bumper-facing base | ribbed, with standoffs rising forward |
+
+**Top and bottom walls are NEW for front-mount.** Rear pods had front and
+back open because of the orientation; in front-mount the equivalent edges
+face up and down where damage exposure is real (low shelves, table edges,
+floor dips, threshold scrapes). Top and bottom walls use the same
+structural pattern as the existing left/right side walls — corner posts +
+mid beam at Z=32 + top beam at Z=61 + center post.
+
+**Wall height purpose** is both structural and protective: 66mm walls
+extend past the full electronics stack height (~43mm top of heatsink) plus
+GPIO header pins (8mm) plus dupont jumper bend-over (~10-15mm) — total
+clearance for any GPIO wiring shape.
 
 ### Design decisions to make
 

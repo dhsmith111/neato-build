@@ -376,21 +376,31 @@ Reasons:
   design needed for the Pi pod.
 - Reversible — the Pi can come out cleanly for other uses.
 - The Turbine Case is smaller than the bare-board Pi pod we were sizing
-  (~95mm wide vs. ~110mm planned), gaining ~15mm of horizontal bumper
-  budget for inter-pod gaps.
+  (95×65 footprint vs. ~110×~70 planned), gaining ~15mm of horizontal
+  bumper budget for inter-pod gaps.
 
-**Implication for the front Pi pod design:** the "Pi pod" becomes a
-**velcro tray + retention frame** that holds the Turbine Case against the
-bumper face. Not a custom board enclosure. SCAD reduces to:
-- Velcro footprint sized to the case bottom.
-- Optional retention lip / frame around the case to prevent sideways slide
-  during bump events.
-- Bumper-facing ribbed base, like the other pods.
+**Turbine Case dimensions (measured 2026-05-09):** 65 × 95 × 46mm,
+totally enclosed. In front-pod orientation (case bottom against bumper):
 
-**Open Pi-pod questions (need physical measurement):**
-- Exact Turbine Case dimensions with Pi+HAT inside.
-- Case mounting hole pattern on the bottom (whether to bolt the case to
-  the pod tray or rely on velcro + retention lip alone).
+| Front-pod orientation | Case value | Notes |
+|---|---|---|
+| Horizontal width on bumper face | 95mm | Within 290mm budget |
+| Vertical height on bumper face | 65mm | Within 71mm pod envelope |
+| Forward extent (sticks out) | 46mm | Slightly more than bare-board target ~30-40mm |
+
+**Implication for the front Pi pod design:** the "Pi pod" reduces to a
+**velcro pad with retention features** that holds the Turbine Case against
+the bumper face. The case is "totally enclosed" — no top/bottom walls
+needed, no port-aware structure, no standoffs. SCAD becomes:
+- Bumper-facing ribbed base sized to the case footprint (~95 × ~65mm with
+  ~5mm rail margins).
+- Velcro contact area on the bumper-facing side.
+- Retention lip / frame on the forward side to grip the case edges and
+  prevent sideways slide during bump events.
+
+**Open Pi-pod questions:**
+- Case mounting hole pattern on the bottom (decide whether to bolt the
+  case to the pod tray, or rely on velcro + retention lip alone).
 - Active cooler reinstall confirmed (was removed during weight research;
   needs to go back in for the case to thermally function as designed).
 - Camera CSI cable routing through the case CSI cutout to the camera pod.

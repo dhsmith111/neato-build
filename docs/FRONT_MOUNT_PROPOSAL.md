@@ -96,24 +96,30 @@ and expected.
    face works as planned; the only constraints are bumper side pinch
    zones and bumper-travel preservation.
 
-### Verification on actual hardware (recommended, easy)
+### Verification on actual hardware — ✅ CONFIRMED 2026-05-09
 
-Once the Pi is wired to the Neato over USB serial (already supported by
-`neato_serial/neato.py`), confirm via:
+Verified on **Board Rev 64, FW 3.4.24079** via `neato_serial/neato.py`:
 
 ```
-TestMode On
-GetAnalogSensors
-GetDigitalSensors
-TestMode Off
+GetAnalogSensors output (key fields):
+  WallSensorInMM,51        ← one side-facing IR only, right-front corner
+  LeftDropInMM,60          ← cliff sensors on underside (60mm = floor, normal)
+  RightDropInMM,60
+  (no forward IR rangefinder fields present)
+
+GetDigitalSensors output:
+  LSIDEBIT,0
+  LFRONTBIT,0
+  RSIDEBIT,0
+  RFRONTBIT,0
+  (4 mechanical bumper bits only — no forward proximity bits)
 ```
 
-Expected — `GetAnalogSensors` returns one forward-distance value
-(`WallSensorInMM`) that changes when something is brought near the
-**right-front corner**, not the front center. `GetDigitalSensors` returns
-4 bumper bits (`LSIDEBIT/LFRONTBIT/RSIDEBIT/RFRONTBIT`) that toggle
-individually when each bumper quadrant is pressed. If the output matches,
-the analysis above is confirmed for this specific unit.
+**Result:** Sensor inventory exactly matches the analysis above. The bumper
+face is a pure mechanical interface. No forward IR sensors exist on this unit.
+Pods can occupy the full bumper face width without occluding any forward
+sensing. Only constraint is preserving line-of-sight for `WallSensorInMM`
+at the right-front corner side window.
 
 ### Mount approach: velcro on the bumper face, chassis rides with the bumper
 

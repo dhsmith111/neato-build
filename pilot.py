@@ -34,8 +34,13 @@ WALL_FAR_MM = 500           # wall this far → drift right (if following)
 WALL_CLEAR_MM = 1000        # beyond this = open space, ignore wall
 WALL_MIN_VALID_MM = 100     # readings below this = pod self-interference, ignore
 
-BBOX_DANGER = 0.25          # bbox_area > this → stop, it's close
-BBOX_CAUTION = 0.08         # bbox_area > this → slow and prepare to turn
+# Camera is angled ~30° downward, wide-angle lens. Bbox area is not a reliable
+# distance metric. These thresholds were calibrated against confirmed cases:
+# - Vase at ~70mm (right next to robot): bbox_area ~0.11
+# - Couch at ~2m away: bbox_area ~0.03
+# Danger = genuinely blocking the path; caution = visible but may not be in path.
+BBOX_DANGER = 0.15          # bbox_area > this → very close, likely in path
+BBOX_CAUTION = 0.10         # bbox_area > this → close, slow down
 
 FORWARD_SPEED = 250         # mm/s normal
 SLOW_SPEED = 150            # mm/s near obstacles
@@ -685,6 +690,7 @@ class PilotDaemon:
 
         consecutive_blocks = 0
         recent_bumps = 0  # track bumper streak for escalating recovery
+        lidar_front_mm = None  # updated every 5 steps
 
         while self._exploring and (time.time() - t_start) < duration_s:
             try:
@@ -699,7 +705,26 @@ class PilotDaemon:
                     self._exploring = False
                     break
 
-                decision = choose_action(det_list, state, recent_bumps=recent_bumps)
+                # Periodic LiDAR check for ground-truth forward distance
+                if step_num % 5 == 0:
+                    ld = read_lidar_summary(self.neato)
+                    lidar_front_mm = ld.get('front_wide_mm')
+                    if lidar_front_mm:
+                        sys.stdout.write(
+                            f"[explore] LiDAR: front={lidar_front_mm}mm "
+                            f"right={ld.get('right_mm')}mm "
+                            f"left={ld.get('left_mm')}mm\n"
+                        )
+                        sys.stdout.flush()
+
+                # Override vision danger if LiDAR says path is actually clear
+                # (camera tilt causes false close detections for distant objects)
+                if lidar_front_mm and lidar_front_mm > 400:
+                    det_list_filtered = [d for d in det_list if d.get('bbox_area', 0) < BBOX_DANGER]
+                else:
+                    det_list_filtered = det_list
+
+                decision = choose_action(det_list_filtered, state, recent_bumps=recent_bumps)
                 reason = decision.get('reason', '')
                 elapsed = round(time.time() - t_start, 1)
 

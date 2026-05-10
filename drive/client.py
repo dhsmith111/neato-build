@@ -50,6 +50,8 @@ def main():
     sub = p.add_subparsers(dest='cmd', required=True)
 
     sub.add_parser('status')
+    ph = sub.add_parser('photo')
+    ph.add_argument('--path', default='/tmp/drive_view.jpg')
     sub.add_parser('stop')
     sub.add_parser('resume')
     sub.add_parser('stop_explore')

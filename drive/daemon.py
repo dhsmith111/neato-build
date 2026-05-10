@@ -212,8 +212,11 @@ class SensorThread(threading.Thread):
         cycle = 0
         while not self._stop_event.is_set():
             try:
-                digital = self.neato.get_digital_sensors()
+                # Fast bumper poll — short delay, only safety-critical sensors
+                digital = self._fast_digital()
                 if self._stop_event.is_set(): break
+
+                # Slower analog (battery, wall sensor, cliff distances) every cycle
                 analog = self.neato.get_analog_sensors()
                 # Accel every 5th cycle (not safety-critical)
                 accel = {}
@@ -227,7 +230,21 @@ class SensorThread(threading.Thread):
                 cycle += 1
             except Exception as e:
                 sys.stdout.write(f'[sensor] error: {e}\n'); sys.stdout.flush()
-            time.sleep(0.18)  # ~5Hz
+            time.sleep(0.05)  # tight loop — actual rate set by serial latency
+
+    def _fast_digital(self):
+        """GetDigitalSensors with short response delay (50ms vs default 300ms)."""
+        raw = self.neato.send('GetDigitalSensors', delay=0.08)
+        sensors = {}
+        for line in raw.strip().split('\n'):
+            if ',' in line and not line.startswith('Digital'):
+                parts = line.split(',')
+                if len(parts) >= 2:
+                    try:
+                        sensors[parts[0].strip()] = int(parts[1].strip())
+                    except ValueError:
+                        pass
+        return sensors
 
     def stop(self):
         self._stop_event.set()
@@ -414,7 +431,9 @@ def decide(state, recent_bumps=0):
     bbox_danger = p['bbox_danger']
     bbox_caution = p['bbox_caution']
 
-    # 1. Bumper recovery — escalate with repeated hits
+    # 1. Bumper recovery — back + pivot ONLY, then return to decide loop
+    # (Don't drive forward in recovery — let the next decide() use fresh LiDAR
+    # to see if the new heading is actually clear before committing forward.)
     if front_bump or side_bump:
         if left_front or left_side:
             pivot_dir = 'right'
@@ -429,7 +448,6 @@ def decide(state, recent_bumps=0):
             'steps': [
                 {'action': 'back', 'mm': backup + extra_backup, 'speed': slow},
                 {'action': 'pivot', 'degrees': pivot_deg, 'direction': pivot_dir, 'speed': piv_spd},
-                {'action': 'forward', 'mm': step_caut, 'speed': slow},
             ],
             'reason': f'bumper: L={int(left_front)}R={int(right_bump)} side={int(side_bump)} '
                       f'recent={recent_bumps} → back{backup+extra_backup}+piv{pivot_deg}_{pivot_dir}',
@@ -837,9 +855,27 @@ class ExploreLoop(threading.Thread):
 
 # ─── Socket command server ────────────────────────────────────────────────────
 
-def handle_command(cmd, state, engine, explore_ref):
+def handle_command(cmd, state, engine, explore_ref, vision_t=None):
     """Handle one command dict. Returns response dict."""
     action = cmd.get('action')
+
+    if action == 'photo':
+        from PIL import Image
+        path = cmd.get('path', '/tmp/drive_view.jpg')
+        if vision_t and vision_t.last_frame is not None:
+            try:
+                Image.fromarray(vision_t.last_frame).save(path, quality=85)
+                snap = state.snapshot()
+                return {
+                    'action': 'photo', 'path': path,
+                    'detections': snap['detections'],
+                    'lidar': {'front': snap['front_wide_mm'], 'right': snap['right_mm'],
+                              'left': snap['left_mm']},
+                    'wall_mm': snap['wall_mm'],
+                }
+            except Exception as e:
+                return {'error': f'save failed: {e}'}
+        return {'error': 'no frame available yet'}
 
     if action == 'status':
         return state.snapshot()
@@ -1010,7 +1046,7 @@ def main():
                 if not data:
                     continue
                 cmd = json.loads(data.decode().strip())
-                resp = handle_command(cmd, state, engine, explore_ref)
+                resp = handle_command(cmd, state, engine, explore_ref, vision_t)
                 conn.sendall((json.dumps(resp) + '\n').encode())
                 if resp.get('exit'):
                     break

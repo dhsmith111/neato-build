@@ -27,6 +27,9 @@ import time
 from datetime import datetime
 from gpiozero import OutputDevice
 
+# Allow running from firmware/ subdirectory
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from scout.telemetry import collect_metadata, compute_summary, update_runs_index
 
 RELAY_PIN = 17
